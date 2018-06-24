@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import moment from 'moment';
+import Header from './components/Header';
 import './App.css';
 
 class App extends Component {
@@ -41,7 +42,7 @@ class App extends Component {
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
     this.bmlh.open();
 
-    setTimeout(() => { this.bmlh.close(); }, 30000);
+    setTimeout(() => { this.bmlh.close(); }, 10000);
   }
 
   render() {
@@ -49,6 +50,8 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Header />
+
         <h1>Brandmeister Hot Groups</h1>
 
         <table width="100%">
