@@ -6,17 +6,19 @@ import './Header.css';
 
 const propTypes = {
   enabled: PropTypes.bool,
-  connected: PropTypes.bool
+  connected: PropTypes.bool,
+  onConnectionClick: PropTypes.func,
 };
 
 const defaultProps = {
   enabled: false,
-  connected: false
+  connected: false,
+  onConnectionClick() { return; }
 };
 
 export default class Header extends React.Component {
   render() {
-    const { enabled, connected } = this.props;
+    const { enabled, connected, onConnectionClick } = this.props;
 
     return (
       <header id="Header">
@@ -26,8 +28,10 @@ export default class Header extends React.Component {
 
         <div className="ConnectBtn">
         { enabled ?
-          <button className="Button Primary">{ connected ? 'Disconnect' : 'Connect' }</button> :
-          'Loading...'
+          <button className="Button Primary" onClick={onConnectionClick}>
+            { connected ? 'Disconnect' : 'Connect' }
+          </button> :
+          'Connecting...'
         }
         </div>
 

@@ -10,6 +10,8 @@ class App extends Component {
     super(props);
 
     this.state = {
+      startup: true,
+      bmConnected: false,
       msgs: []
     };
 
@@ -17,6 +19,28 @@ class App extends Component {
     this.bmagg = new BMAgg();
 
     this.handleMqttMsg = this.handleMqttMsg.bind(this);
+    this.handleConnectionChange = this.handleConnectionChange.bind(this);
+    this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
+  }
+
+  handleConnectionBtn() {
+    if (this.state.bmConnected) {
+      // disconnect
+      this.bmlh.close();
+    } else {
+      // connect
+      this.bmlh.open();
+      this.setState({ startup: true });
+    }
+  }
+
+  handleConnectionChange(connected) {
+    if (this.state.startup) {
+      // turn off startup state
+      this.setState({ startup: false, bmConnected: connected });
+    } else {
+      this.setState({ bmConnected: connected });
+    }
   }
 
   handleMqttMsg(msg) {
@@ -39,18 +63,20 @@ class App extends Component {
       }
     };
 
+    this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
     this.bmlh.open();
-
-    setTimeout(() => { this.bmlh.close(); }, 10000);
   }
 
   render() {
-    const { msgs } = this.state;
+    const { startup, bmConnected, msgs } = this.state;
 
     return (
       <div className="App">
-        <Header />
+        <Header
+          enabled={!startup}
+          connected={bmConnected}
+          onConnectionClick={this.handleConnectionBtn} />
 
         <h1>Brandmeister Hot Groups</h1>
 

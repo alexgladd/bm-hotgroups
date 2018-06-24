@@ -13,6 +13,7 @@ class BrandmeisterLastHeard {
     this.connected = false;
     this.url = url;
     this.options = { ...options, autoConnect: false };
+    this.handleConnectChange = () => { return; };
 
     this.socket = io(this.url, this.options);
 
@@ -51,39 +52,54 @@ class BrandmeisterLastHeard {
     });
   }
 
+  onConnectionChange(handler=(connectState) => { return; }) {
+    if (typeof handler !== 'function') {
+      return;
+    }
+
+    this.handleConnectChange = handler;
+  }
+
   _onConnect() {
-    this.connected = true;
     console.log(`[BMLH] successfully connected to ${this.url}`);
+    this.connected = true;
+    this.handleConnectChange(this.connected);
   }
 
   _onConnectError(err) {
-    this.connected = false;
     console.error(`[BMLH] unable to (re)connect to ${this.url}`, err);
+    this.connected = false;
+    this.handleConnectChange(this.connected);
   }
 
   _onConnectTimeout() {
-    this.connected = false;
     console.error(`[BMLH] connect timeout to ${this.url}`);
+    this.connected = false;
+    this.handleConnectChange(this.connected);
   }
 
   _onDisconnect(reason) {
-    this.connected = false;
     console.log(`[BMLH] disconnected from ${this.url}`);
+    this.connected = false;
+    this.handleConnectChange(this.connected);
   }
 
   _onReconnect() {
-    this.connected = true;
     console.log(`[BMLH] successfully reconnected to ${this.url}`);
+    this.connected = true;
+    this.handleConnectChange(this.connected);
   }
 
   _onReconnecting(attempt) {
-    this.connected = false;
     console.log(`[BMLH] attempting to reconnect to ${this.url} (${attempt})`);
+    this.connected = false;
+    this.handleConnectChange(this.connected);
   }
 
   _onReconnectFailed() {
-    this.connected = false;
     console.error(`[BMLH] failed to reconnect to ${this.url}`);
+    this.connected = false;
+    this.handleConnectChange(this.connected);
   }
 
   _onError(err) {
