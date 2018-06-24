@@ -23,7 +23,7 @@ export default class Header extends React.Component {
     return (
       <header id="Header">
         <div className="Title">
-          <FontAwesomeIcon icon={faBroadcastTower} /> Brandmeister Activity
+          <FontAwesomeIcon icon={faBroadcastTower} /> Brandmeister Top Activity
         </div>
 
         <div className="ConnectBtn">
