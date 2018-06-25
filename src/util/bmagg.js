@@ -8,6 +8,7 @@ class BrandmeisterAggregator {
     this.window = windowMins;
     this.maxWindow = maxWindowMins;
     this.sessions = {};
+    this.windowedSessions = [];
     this.talkGroups = [];
     this.callsigns = [];
   }
@@ -18,7 +19,7 @@ class BrandmeisterAggregator {
 
   addSession(session) {
     if (session.Event !== 'Session-Stop' || _.has(this.sessions, session.SessionID)) {
-      return;
+      return false;
     }
 
     this.sessions[session.SessionID] = _.cloneDeep(session);
@@ -28,23 +29,30 @@ class BrandmeisterAggregator {
     const stop = moment.unix(session.Stop);
     this.sessions[session.SessionID].duration = stop.diff(start, 'seconds');
 
-    this.reaggregate();
+    return this.reaggregate();
   }
 
   reaggregate() {
     const now = moment();
-    const windowedSessions = _.filter(this.sessions, (session) => {
+    let windowedSessions = _.filter(this.sessions, (session) => {
       return this._windowFilter(now, session);
     });
+    windowedSessions = _.orderBy(windowedSessions, ['Start'], ['desc']);
 
-    console.log('Windowed sessions', windowedSessions)
+    if (this._didWindowSessionsChange(windowedSessions)) {
+      // talk groups
+      const talkGroups = _.reduce(windowedSessions, this._talkGroupReducer, {});
+      this.talkGroups = _.orderBy(talkGroups, ['talkTime', 'id'], ['desc', 'asc']);
 
-    // talk groups
-    const talkGroups = _.reduce(windowedSessions, this._talkGroupReducer, {});
-    this.talkGroups = _.orderBy(talkGroups, ['talkTime', 'id'], ['desc', 'asc']);
+      // callsigns
+      // TODO
 
-    // callsigns
-    // TODO
+      console.log('Windowed sessions', windowedSessions)
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   prune() {
@@ -75,6 +83,29 @@ class BrandmeisterAggregator {
     
     acc[tg.id] = tg;
     return acc;
+  }
+
+  _didWindowSessionsChange(newWindowedSessions) {
+    if (this.windowedSessions.length === 0 && newWindowedSessions.length === 0) {
+      return false;
+    } else if (this.windowedSessions.length === 0 && newWindowedSessions.length !== 0) {
+      return true;
+    } else if (this.windowedSessions.length !== 0 && newWindowedSessions.length === 0) {
+      return true;
+    } else if (this.windowedSessions.length !== newWindowedSessions.length) {
+      return true;
+    } else {
+      const oldFirst = _.first(this.windowedSessions);
+      const oldLast = _.last(this.windowedSessions);
+      const newFirst = _.first(newWindowedSessions);
+      const newLast = _.last(newWindowedSessions);
+
+      if (oldFirst.SessionID !== newFirst.SessionID || oldLast.SessionID !== newLast.SessionID) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }
 

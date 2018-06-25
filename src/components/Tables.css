@@ -1,0 +1,18 @@
+/*
+Common table styles
+*/
+
+table {
+  width: 100%;
+  margin-top: 24px;
+  border-collapse: collapse;
+}
+
+thead {
+  padding-bottom: 6px;
+  border-bottom: 2px solid #898695;
+}
+
+tbody {
+  padding-top: 6px;
+}

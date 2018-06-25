@@ -1,0 +1,12 @@
+/*
+TopGroups styles
+*/
+
+#TopGroups {
+  grid-area: groups;
+  margin: 0 0.5rem;
+}
+
+#TopGroups h2 {
+  text-align: center;
+}

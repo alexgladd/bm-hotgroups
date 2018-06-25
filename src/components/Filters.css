@@ -1,0 +1,10 @@
+/*
+Common filters styles
+*/
+
+.Filters {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  background-color: #898695;
+}

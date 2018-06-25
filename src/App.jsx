@@ -3,6 +3,7 @@ import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import moment from 'moment';
 import Header from './components/Header';
+import TopGroups from './components/TopGroups';
 import './App.css';
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
     this.state = {
       startup: true,
       bmConnected: false,
+      topGroups: [],
       msgs: []
     };
 
@@ -45,9 +47,14 @@ class App extends Component {
 
   handleMqttMsg(msg) {
     console.log('Session stop received', msg);
-    this.bmagg.addSession(msg);
-    console.log('Top TGs', this.bmagg.topTalkGroups);
-    this.setState({ msgs: [ msg, ...this.state.msgs ] });
+
+    if(this.bmagg.addSession(msg)) {
+      console.log('Top TGs', this.bmagg.topTalkGroups);
+      this.setState({ topGroups: this.bmagg.topTalkGroups });
+    }
+
+    
+    //this.setState({ msgs: [ msg, ...this.state.msgs ] });
   }
 
   componentDidMount() {
@@ -65,18 +72,24 @@ class App extends Component {
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
-    this.bmlh.open();
+    //this.bmlh.open();
   }
 
   render() {
     const { startup, bmConnected, msgs } = this.state;
 
     return (
-      <div className="App">
+      <div>
         <Header
           enabled={!startup}
           connected={bmConnected}
           onConnectionClick={this.handleConnectionBtn} />
+        
+        <div id="App">
+          <TopGroups talkGroups={[]} />
+          <div>Calls</div>
+          <div>Sessions</div>
+        </div>
 
         <h1>Brandmeister Hot Groups</h1>
 
