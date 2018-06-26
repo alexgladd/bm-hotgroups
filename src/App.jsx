@@ -72,11 +72,11 @@ class App extends Component {
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
-    //this.bmlh.open();
+    this.bmlh.open();
   }
 
   render() {
-    const { startup, bmConnected, msgs } = this.state;
+    const { startup, bmConnected, topGroups, msgs } = this.state;
 
     return (
       <div>
@@ -86,31 +86,10 @@ class App extends Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <div id="App">
-          <TopGroups talkGroups={[]} />
+          <TopGroups talkGroups={topGroups} />
           <div>Calls</div>
           <div>Sessions</div>
         </div>
-
-        <h1>Brandmeister Hot Groups</h1>
-
-        <table width="100%">
-          <thead><tr>
-            <th>Talk Group</th>
-            <th>Talk Time</th>
-            <th>Last Active</th>
-          </tr></thead>
-          <tbody>
-          {
-            this.bmagg.topTalkGroups.map((tg, idx) => (
-              <tr key={idx}>
-                <td>{ `${tg.name} (${tg.id})` }</td>
-                <td>{ `${tg.talkTime} seconds`}</td>
-                <td>{ moment.unix(tg.lastActive).format('ddd h:mm:ssa') }</td>
-              </tr>
-            ))
-          }
-          </tbody>
-        </table>
 
         <table width="100%">
           <thead>

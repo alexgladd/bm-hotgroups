@@ -3,16 +3,36 @@ Common table styles
 */
 
 table {
+  /* table-layout: fixed; */
   width: 100%;
   margin-top: 24px;
   border-collapse: collapse;
 }
 
 thead {
-  padding-bottom: 6px;
   border-bottom: 2px solid #898695;
 }
 
-tbody {
-  padding-top: 6px;
+/* thead tr {
+  display: block;
+} */
+
+thead th {
+  text-align: left;
+  padding: 6px;
+}
+
+/* tbody {
+  display: block;
+  overflow: auto;
+  height: 75vh;
+  width: 100%;
+} */
+
+tbody td {
+  padding: 6px;
+}
+
+tbody tr:nth-child(even) td {
+  background-color: #fff;
 }
