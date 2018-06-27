@@ -10,29 +10,19 @@ table {
 }
 
 thead {
-  border-bottom: 2px solid #898695;
+  border-bottom: 3px solid #898695;
 }
-
-/* thead tr {
-  display: block;
-} */
 
 thead th {
   text-align: left;
   padding: 6px;
 }
 
-/* tbody {
-  display: block;
-  overflow: auto;
-  height: 75vh;
-  width: 100%;
-} */
-
 tbody td {
   padding: 6px;
+  border-bottom: 1px solid #898695;
 }
 
-tbody tr:nth-child(even) td {
-  background-color: #fff;
+tbody tr:last-child td {
+  border-bottom: none;
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment';
+import _ from 'lodash';
 import './TopGroups.css';
 import './Filters.css';
 import './Tables.css';
@@ -16,11 +17,31 @@ const defaultProps = {};
 export default class TopGroups extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.state = {
+      viewCount: 20
+    };
   }
 
   render() {
     const { talkGroups } = this.props;
+    const { viewCount } = this.state;
+
+    let topGroups = talkGroups.map((tg, idx) => (
+      <tr key={idx}>
+        <td>{ `${tg.name} (${tg.id})` }</td>
+        <td>{ `${tg.talkTime} seconds` }</td>
+        <td>{ moment.unix(tg.lastActive).format('ddd h:mm:ssa') }</td>
+      </tr>
+    )).slice(0, viewCount);
+
+    if (topGroups.length < viewCount) {
+      topGroups = topGroups.concat(_.times(viewCount - topGroups.length, (idx) => (
+        <tr key={topGroups.length + idx}>
+          <td>&nbsp;</td> <td> </td> <td> </td>
+        </tr>
+      )));
+    }
 
     return (
       <div id="TopGroups">
@@ -36,13 +57,7 @@ export default class TopGroups extends React.Component {
           </tr></thead>
           <tbody>
           {
-            talkGroups.map((tg, idx) => (
-              <tr key={idx}>
-                <td>{ `${tg.name} (${tg.id})` }</td>
-                <td>{ `${tg.talkTime} seconds` }</td>
-                <td>{ moment.unix(tg.lastActive).format('ddd h:mm:ssa') }</td>
-              </tr>
-            ))
+            topGroups
           }
           </tbody>
         </table>
