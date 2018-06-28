@@ -82,7 +82,12 @@ class BrandmeisterAggregator {
 
     this.windowedSessions = prunedWindow;
 
-    return this.reaggregate();
+    if (beforeCount !== afterCount) {
+      this.reaggregate();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   _windowFilter(now, session) {
