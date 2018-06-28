@@ -14,24 +14,42 @@ class App extends Component {
       startup: true,
       bmConnected: false,
       topGroups: [],
+      topCallsigns: [],
       msgs: []
     };
 
     this.bmlh = new BMLH();
     this.bmagg = new BMAgg();
 
+    this.updateAggregations = this.updateAggregations.bind(this);
     this.handleMqttMsg = this.handleMqttMsg.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
+    this.handleAggregatorPrune = this.handleAggregatorPrune.bind(this);
+  }
+
+  updateAggregations() {
+    console.log('Top TGs', this.bmagg.topTalkGroups);
+    console.log('Top Callsigns', this.bmagg.topCallsigns);
+
+    this.setState({
+      topGroups: this.bmagg.topTalkGroups,
+      topCallsigns: this.bmagg.topCallsigns
+    });
   }
 
   handleConnectionBtn() {
     if (this.state.bmConnected) {
       // disconnect
       this.bmlh.close();
+
+      if (this.pruneIntervalId) {
+        clearInterval(this.pruneIntervalId);
+      }
     } else {
       // connect
       this.bmlh.open();
+      this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
       this.setState({ startup: true });
     }
   }
@@ -48,13 +66,15 @@ class App extends Component {
   handleMqttMsg(msg) {
     console.log('Session stop received', msg);
 
-    if(this.bmagg.addSession(msg)) {
-      console.log('Top TGs', this.bmagg.topTalkGroups);
-      this.setState({ topGroups: this.bmagg.topTalkGroups });
+    if (this.bmagg.addSession(msg)) {
+      this.updateAggregations();
     }
+  }
 
-    
-    //this.setState({ msgs: [ msg, ...this.state.msgs ] });
+  handleAggregatorPrune() {
+    if (this.bmagg.prune()) {
+      this.updateAggregations();
+    }
   }
 
   componentDidMount() {
@@ -73,6 +93,14 @@ class App extends Component {
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
     this.bmlh.open();
+
+    this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
+  }
+
+  componentWillUnmount() {
+    if (this.pruneIntervalId) {
+      clearInterval(this.pruneIntervalId);
+    }
   }
 
   render() {

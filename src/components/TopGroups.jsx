@@ -38,7 +38,7 @@ export default class TopGroups extends React.Component {
     if (topGroups.length < viewCount) {
       topGroups = topGroups.concat(_.times(viewCount - topGroups.length, (idx) => (
         <tr key={topGroups.length + idx}>
-          <td>&nbsp;</td> <td> </td> <td> </td>
+          <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
         </tr>
       )));
     }

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 class BrandmeisterAggregator {
-  constructor(windowMins=10, maxWindowMins=60) {
+  constructor(windowMins=10, maxWindowMins=30) {
     this.window = windowMins;
     this.maxWindow = maxWindowMins;
     this.sessions = {};
@@ -17,8 +17,13 @@ class BrandmeisterAggregator {
     return this.talkGroups;
   }
 
+  get topCallsigns() {
+    return this.callsigns;
+  }
+
   addSession(session) {
     if (session.Event !== 'Session-Stop' || _.has(this.sessions, session.SessionID)) {
+      console.log('[BMAGG] Skipping session (not stop or duplicate ID)');
       return false;
     }
 
@@ -29,38 +34,60 @@ class BrandmeisterAggregator {
     const stop = moment.unix(session.Stop);
     this.sessions[session.SessionID].duration = stop.diff(start, 'seconds');
 
-    return this.reaggregate();
-  }
+    if (this._windowFilter(moment(), session)) {
+      this.windowedSessions.push(this.sessions[session.SessionID]);
+      this.windowedSessions = _.orderBy(this.windowedSessions, ['Start'], ['desc']);
 
-  reaggregate() {
-    const now = moment();
-    let windowedSessions = _.filter(this.sessions, (session) => {
-      return this._windowFilter(now, session);
-    });
-    windowedSessions = _.orderBy(windowedSessions, ['Start'], ['desc']);
-
-    if (this._didWindowSessionsChange(windowedSessions)) {
-      // talk groups
-      const talkGroups = _.reduce(windowedSessions, this._talkGroupReducer, {});
-      this.talkGroups = _.orderBy(talkGroups, ['talkTime', 'id'], ['desc', 'asc']);
-
-      // callsigns
-      // TODO
-
-      console.log('Windowed sessions', windowedSessions)
-
+      console.log('[BMAGG] Windowed sessions', this.windowedSessions);
+      this.reaggregate();
       return true;
     } else {
       return false;
     }
   }
 
-  prune() {
+  reaggregate() {
+    // talk groups
+    const talkGroups = _.reduce(this.windowedSessions, this._talkGroupReducer, {});
+    this.talkGroups = _.orderBy(talkGroups, ['talkTime', 'id'], ['desc', 'asc']);
 
+    // callsigns
+    const callsigns = _.reduce(this.windowedSessions, this._callsignReducer, {});
+    this.callsigns = _.orderBy(callsigns, ['talkTime', 'id'], ['desc', 'asc']);
+  }
+
+  prune() {
+    const now = moment();
+
+    // prune sessions
+    let beforeCount = _.size(this.sessions);
+    const prunedSessions = _.filter(this.sessions, (session) => {
+      return this._maxWindowFilter(now, session);
+    });
+    let afterCount = prunedSessions.length;
+    console.log(`[BMAGG] Pruned saved sessions: ${beforeCount} -> ${afterCount}`);
+
+    this.sessions = prunedSessions;
+
+    // prune windowed sessions
+    beforeCount = this.windowedSessions.length;
+    const prunedWindow = _.filter(this.windowedSessions, (session) => {
+      return this._windowFilter(now, session);
+    });
+    afterCount = prunedWindow.length;
+    console.log(`[BMAGG] Pruned window sessions: ${beforeCount} -> ${afterCount}`);
+
+    this.windowedSessions = prunedSessions;
+
+    return this.reaggregate();
   }
 
   _windowFilter(now, session) {
-    return now.diff(moment.unix(session.Start), 'minutes') <= this.window;
+    return now.diff(moment.unix(session.Start), 'minutes') < this.window;
+  }
+
+  _maxWindowFilter(now, session) {
+    return now.diff(moment.unix(session.Start), 'minutes') < this.maxWindow;
   }
 
   _talkGroupReducer(acc, session) {
@@ -79,33 +106,33 @@ class BrandmeisterAggregator {
     }
 
     tg.talkTime = tg.talkTime + session.duration;
-    tg.lastActive = session.Stop
+    tg.lastActive = session.Stop;
     
     acc[tg.id] = tg;
     return acc;
   }
 
-  _didWindowSessionsChange(newWindowedSessions) {
-    if (this.windowedSessions.length === 0 && newWindowedSessions.length === 0) {
-      return false;
-    } else if (this.windowedSessions.length === 0 && newWindowedSessions.length !== 0) {
-      return true;
-    } else if (this.windowedSessions.length !== 0 && newWindowedSessions.length === 0) {
-      return true;
-    } else if (this.windowedSessions.length !== newWindowedSessions.length) {
-      return true;
+  _callsignReducer(acc, session) {
+    let cs;
+    if (_.has(acc, session.SourceID)) {
+      // update existing
+      cs = acc[session.SourceID];
     } else {
-      const oldFirst = _.first(this.windowedSessions);
-      const oldLast = _.last(this.windowedSessions);
-      const newFirst = _.first(newWindowedSessions);
-      const newLast = _.last(newWindowedSessions);
-
-      if (oldFirst.SessionID !== newFirst.SessionID || oldLast.SessionID !== newLast.SessionID) {
-        return true;
-      } else {
-        return false;
-      }
+      // create new
+      cs = {
+        id: session.SourceID,
+        callsign: session.SourceCall,
+        name: session.SourceName,
+        talkTime: 0,
+        lastActive: 0
+      };
     }
+
+    cs.talkTime = cs.talkTime + session.duration;
+    cs.lastActive = session.Stop;
+
+    acc[cs.id] = cs;
+    return acc;
   }
 }
 
