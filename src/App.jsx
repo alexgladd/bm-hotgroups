@@ -4,6 +4,7 @@ import BMAgg from './util/bmagg';
 import moment from 'moment';
 import Header from './components/Header';
 import TopGroups from './components/TopGroups';
+import TopCallsigns from './components/TopCallsigns';
 import './App.css';
 
 class App extends Component {
@@ -104,7 +105,7 @@ class App extends Component {
   }
 
   render() {
-    const { startup, bmConnected, topGroups, msgs } = this.state;
+    const { startup, bmConnected, topGroups, topCallsigns, msgs } = this.state;
 
     return (
       <div>
@@ -115,7 +116,7 @@ class App extends Component {
         
         <div id="App">
           <TopGroups talkGroups={topGroups} />
-          <div>Calls</div>
+          <TopCallsigns callsigns={topCallsigns} />
           <div>Sessions</div>
         </div>
 

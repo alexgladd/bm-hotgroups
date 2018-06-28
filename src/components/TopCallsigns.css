@@ -1,0 +1,12 @@
+/*
+TopGroups styles
+*/
+
+#TopCallsigns {
+  grid-area: calls;
+  margin: 0 12px;
+}
+
+#TopCallsigns h2 {
+  text-align: center;
+}
