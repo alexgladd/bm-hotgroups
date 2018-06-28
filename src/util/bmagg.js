@@ -61,10 +61,13 @@ class BrandmeisterAggregator {
 
     // prune sessions
     let beforeCount = _.size(this.sessions);
-    const prunedSessions = _.filter(this.sessions, (session) => {
-      return this._maxWindowFilter(now, session);
+    const prunedSessions = {};
+    _.forOwn(this.sessions, (session, id) => {
+      if(this._maxWindowFilter(now, session)) {
+        prunedSessions[id] = session;
+      }
     });
-    let afterCount = prunedSessions.length;
+    let afterCount = _.size(prunedSessions);
     console.log(`[BMAGG] Pruned saved sessions: ${beforeCount} -> ${afterCount}`);
 
     this.sessions = prunedSessions;
@@ -77,7 +80,7 @@ class BrandmeisterAggregator {
     afterCount = prunedWindow.length;
     console.log(`[BMAGG] Pruned window sessions: ${beforeCount} -> ${afterCount}`);
 
-    this.windowedSessions = prunedSessions;
+    this.windowedSessions = prunedWindow;
 
     return this.reaggregate();
   }
