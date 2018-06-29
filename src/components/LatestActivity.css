@@ -1,0 +1,13 @@
+/*
+LatestActivity styles
+*/
+
+#LatestActivity {
+  grid-area: sessions;
+  margin: 0 12px;
+  margin-bottom: 24px;
+}
+
+#LatestActivity h2 {
+  text-align: center;
+}

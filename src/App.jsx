@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
-import moment from 'moment';
 import Header from './components/Header';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
+import LatestActivity from './components/LatestActivity';
 import { getDurationSeconds } from './util/session';
 import './App.css';
 
@@ -17,6 +17,7 @@ class App extends Component {
       bmConnected: false,
       topGroups: [],
       topCallsigns: [],
+      latestSessions: [],
       msgs: []
     };
 
@@ -36,7 +37,8 @@ class App extends Component {
 
     this.setState({
       topGroups: this.bmagg.topTalkGroups,
-      topCallsigns: this.bmagg.topCallsigns
+      topCallsigns: this.bmagg.topCallsigns,
+      latestSessions: this.bmagg.latestActivity,
     });
   }
 
@@ -102,7 +104,7 @@ class App extends Component {
   }
 
   render() {
-    const { startup, bmConnected, topGroups, topCallsigns, msgs } = this.state;
+    const { startup, bmConnected, topGroups, topCallsigns, latestSessions } = this.state;
 
     return (
       <div>
@@ -112,49 +114,13 @@ class App extends Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <div id="App">
+          <LatestActivity sessions={latestSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
-          <div>Sessions</div>
         </div>
-
-        <table width="100%">
-          <thead>
-          <tr>
-            <th>Start</th>
-            <th>Stop</th>
-            <th>Duration</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Link</th>
-            <th>Type</th>
-          </tr>
-          </thead>
-          <tbody>
-          {
-            msgs.map((msg, idx) => {
-              const start = moment.unix(msg.Start);
-              const stop = moment.unix(msg.Stop);
-              return (
-              <tr key={idx}>
-                <td>{ start.format('ddd h:mm:ssa') }</td>
-                <td>{ stop.format('ddd h:mm:ssa') }</td>
-                <td>{ `${stop.diff(start, 'seconds')} seconds` }</td>
-                <td>{ `${msg.SourceCall} (${msg.SourceID})` }</td>
-                <td>{ `${msg.DestinationName} (${msg.DestinationID})` }</td>
-                <td>{ msg.LinkName }</td>
-                <td>{ msg.SessionType }</td>
-              </tr>
-              );
-            })
-          }
-          </tbody>
-        </table>
       </div>
     );
   }
 }
 
 export default App;
-
-// https://ask.brandmeister.network/question/729/using-js-php-to-query-brandmeister-last-heard-data/
-// https://socket.io/docs/client-api/

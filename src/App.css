@@ -14,8 +14,8 @@ Theme: http://colormind.io/bootstrap/
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "groups calls"
-    "sessions sessions";
+    "sessions sessions"
+    "groups calls";
   margin: 0 12px;
   margin-top: 72px;
 }
