@@ -29,7 +29,7 @@ export default class TopGroups extends React.Component {
 
     let topGroups = talkGroups.map((tg, idx) => (
       <tr key={idx}>
-        <td>{ `${tg.name} (${tg.id})` }</td>
+        <td>{ tg.label }</td>
         <td>{ `${tg.talkTime} seconds` }</td>
         <td>{ moment.unix(tg.lastActive).format('ddd h:mm:ssa') }</td>
       </tr>

@@ -29,7 +29,7 @@ export default class TopCallsigns extends React.Component {
 
     let topCallsigns = callsigns.map((cs, idx) => (
       <tr key={idx}>
-        <td>{ `${cs.callsign} (${cs.id})` }</td>
+        <td>{ cs.label }</td>
         <td>{ cs.name }</td>
         <td>{ `${cs.talkTime} seconds` }</td>
         <td>{ moment.unix(cs.lastActive).format('ddd h:mm:ssa') }</td>

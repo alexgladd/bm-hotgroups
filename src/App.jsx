@@ -5,6 +5,7 @@ import moment from 'moment';
 import Header from './components/Header';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
+import { getDurationSeconds } from './util/session';
 import './App.css';
 
 class App extends Component {
@@ -81,11 +82,7 @@ class App extends Component {
   componentDidMount() {
     const msgFilter = (msg) => {
       if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
-        const start = moment.unix(msg.Start);
-        const stop = moment.unix(msg.Stop);
-        const diff = stop.diff(start, 'seconds');
-
-        return diff > 0;
+        return getDurationSeconds(msg) > 0;
       } else {
         return false;
       }

@@ -2,6 +2,7 @@
 
 import _ from 'lodash';
 import moment from 'moment';
+import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds } from './session';
 
 class BrandmeisterAggregator {
   constructor(windowMins=10, maxWindowMins=30) {
@@ -21,6 +22,10 @@ class BrandmeisterAggregator {
     return this.callsigns;
   }
 
+  get latestActivity() {
+    return this.windowedSessions;
+  }
+
   addSession(session) {
     if (session.Event !== 'Session-Stop' || _.has(this.sessions, session.SessionID)) {
       console.log('[BMAGG] Skipping session (not stop or duplicate ID)');
@@ -30,13 +35,11 @@ class BrandmeisterAggregator {
     this.sessions[session.SessionID] = _.cloneDeep(session);
 
     // call duration
-    const start = moment.unix(session.Start);
-    const stop = moment.unix(session.Stop);
-    this.sessions[session.SessionID].duration = stop.diff(start, 'seconds');
+    this.sessions[session.SessionID].duration = getDurationSeconds(session);
 
     if (this._windowFilter(moment(), session)) {
       this.windowedSessions.push(this.sessions[session.SessionID]);
-      this.windowedSessions = _.orderBy(this.windowedSessions, ['Start'], ['desc']);
+      this.windowedSessions = _.orderBy(this.windowedSessions, ['Stop'], ['desc']);
 
       console.log('[BMAGG] Windowed sessions', this.windowedSessions);
       this.reaggregate();
@@ -108,6 +111,7 @@ class BrandmeisterAggregator {
       tg = {
         id: session.DestinationID,
         name: session.DestinationName,
+        label: getTalkGroupLabel(session),
         talkTime: 0,
         lastActive: 0
       };
@@ -130,6 +134,7 @@ class BrandmeisterAggregator {
       cs = {
         id: session.SourceID,
         callsign: session.SourceCall,
+        label: getCallsignLabel(session),
         name: session.SourceName,
         talkTime: 0,
         lastActive: 0
