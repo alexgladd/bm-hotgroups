@@ -17,8 +17,7 @@ class App extends Component {
       bmConnected: false,
       topGroups: [],
       topCallsigns: [],
-      latestSessions: [],
-      msgs: []
+      latestSessions: []
     };
 
     this.bmlh = new BMLH();
