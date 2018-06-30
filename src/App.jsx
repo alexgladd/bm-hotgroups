@@ -22,7 +22,7 @@ class App extends Component {
     };
 
     this.bmlh = new BMLH();
-    this.bmagg = new BMAgg(1, 2);
+    this.bmagg = new BMAgg(2, 3);
 
     this.updateAggregations = this.updateAggregations.bind(this);
     this.handleMqttMsg = this.handleMqttMsg.bind(this);

@@ -19,7 +19,7 @@ export default class LatestActivity extends React.Component {
     super(props);
 
     this.state = {
-      viewCount: 10
+      viewCount: 5
     };
   }
 
