@@ -54,7 +54,7 @@ export default class LatestActivity extends React.Component {
       <div id="LatestActivity">
         <h2><FontAwesomeIcon icon={faMicrophone} /> Latest Activity</h2>
 
-        <div className="Filters">Filters</div>
+        <div className="Filters"></div>
 
         <table>
           <thead><tr>

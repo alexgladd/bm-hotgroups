@@ -48,7 +48,7 @@ export default class TopCallsigns extends React.Component {
       <div id="TopCallsigns">
         <h2><FontAwesomeIcon icon={faUser} /> Top Callsigns</h2>
 
-        <div className="Filters">Filters</div>
+        <div className="Filters"></div>
 
         <table>
           <thead><tr>

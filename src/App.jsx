@@ -113,11 +113,11 @@ class App extends Component {
           connected={bmConnected}
           onConnectionClick={this.handleConnectionBtn} />
         
-        <div id="App">
+        <main id="App">
           <LatestActivity sessions={latestSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
-        </div>
+        </main>
 
         <Footer />
       </React.Fragment>
