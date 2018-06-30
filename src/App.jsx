@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
 import LatestActivity from './components/LatestActivity';
@@ -106,7 +107,7 @@ class App extends Component {
     const { startup, bmConnected, topGroups, topCallsigns, latestSessions } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         <Header
           enabled={!startup}
           connected={bmConnected}
@@ -117,7 +118,9 @@ class App extends Component {
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
         </div>
-      </div>
+
+        <Footer />
+      </React.Fragment>
     );
   }
 }

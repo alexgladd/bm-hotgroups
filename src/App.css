@@ -16,8 +16,7 @@ Theme: http://colormind.io/bootstrap/
   grid-template-areas:
     "sessions sessions"
     "groups calls";
-  margin: 0 12px;
-  margin-top: 72px;
+  margin: 72px 12px;
 }
 
 .Button {
