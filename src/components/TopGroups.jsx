@@ -45,7 +45,7 @@ export default class TopGroups extends React.Component {
 
     return (
       <div id="TopGroups">
-        <h2><FontAwesomeIcon icon={faUsers} /> Top Talk Groups</h2>
+        <h2><FontAwesomeIcon icon={faUsers} /> Top Talkgroups</h2>
 
         <div className="Filters"></div>
 
