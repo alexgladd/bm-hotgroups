@@ -14,10 +14,10 @@ Header styles
   z-index: 100;
 }
 
-#Header .Title {
+#Header h1 {
   flex: 1 1 auto;
   font-size: 1.25rem;
-  font-weight: bold;
+  margin: 0;
 }
 
 #Header .ConnectBtn {
