@@ -98,6 +98,8 @@ class App extends Component {
   }
 
   componentWillUnmount() {
+    this.bmlh.close();
+    
     if (this.pruneIntervalId) {
       clearInterval(this.pruneIntervalId);
     }
