@@ -1,0 +1,12 @@
+# Travis CI config
+
+language: node_js
+node_js:
+  - "node"
+  - "8"
+
+cache: yarn
+
+install: yarn install
+
+script: yarn test
