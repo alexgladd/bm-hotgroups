@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
 import LatestActivity from './components/LatestActivity';
+import log from './util/logger';
 import { getDurationSeconds } from './util/session';
 import './App.css';
 
@@ -33,8 +34,8 @@ class App extends React.Component {
   }
 
   updateAggregations() {
-    console.log('Top TGs', this.bmagg.topTalkGroups);
-    console.log('Top Callsigns', this.bmagg.topCallsigns);
+    log('Top TGs', this.bmagg.topTalkGroups);
+    log('Top Callsigns', this.bmagg.topCallsigns);
 
     this.setState({
       topGroups: this.bmagg.topTalkGroups,
@@ -77,7 +78,7 @@ class App extends React.Component {
   }
 
   handleMqttMsg(msg) {
-    console.log('Session stop received', msg);
+    log('Session stop received', msg);
 
     if (this.bmagg.addSession(msg)) {
       this.updateAggregations();

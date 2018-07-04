@@ -2,6 +2,7 @@
 
 import _ from 'lodash';
 import moment from 'moment';
+import log from './logger';
 import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds } from './session';
 
 class BrandmeisterAggregator {
@@ -28,7 +29,7 @@ class BrandmeisterAggregator {
 
   addSession(session) {
     if (session.Event !== 'Session-Stop' || _.has(this.sessions, session.SessionID)) {
-      console.log('[BMAGG] Skipping session (not stop or duplicate ID)');
+      log('[BMAGG] Skipping session (not stop or duplicate ID)');
       return false;
     }
 
@@ -41,7 +42,7 @@ class BrandmeisterAggregator {
       this.windowedSessions.push(this.sessions[session.SessionID]);
       this.windowedSessions = _.orderBy(this.windowedSessions, ['Stop'], ['desc']);
 
-      console.log('[BMAGG] Windowed sessions', this.windowedSessions);
+      log('[BMAGG] Windowed sessions', this.windowedSessions);
       this.reaggregate();
       return true;
     } else {
@@ -71,7 +72,7 @@ class BrandmeisterAggregator {
       }
     });
     let afterCount = _.size(prunedSessions);
-    console.log(`[BMAGG] Pruned saved sessions: ${beforeCount} -> ${afterCount}`);
+    log(`[BMAGG] Pruned saved sessions: ${beforeCount} -> ${afterCount}`);
 
     this.sessions = prunedSessions;
 
@@ -81,7 +82,7 @@ class BrandmeisterAggregator {
       return this._windowFilter(now, session);
     });
     afterCount = prunedWindow.length;
-    console.log(`[BMAGG] Pruned window sessions: ${beforeCount} -> ${afterCount}`);
+    log(`[BMAGG] Pruned window sessions: ${beforeCount} -> ${afterCount}`);
 
     this.windowedSessions = prunedWindow;
 

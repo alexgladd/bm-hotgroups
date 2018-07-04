@@ -1,6 +1,7 @@
 // wrapper for listening to Brandmeister's 'Last Heard' stream
 
 import io from 'socket.io-client';
+import log from './logger';
 
 const BM_DEFAULT_URL = 'https://api.brandmeister.network';
 const BM_DEFAULT_OPTS = {
@@ -61,7 +62,7 @@ class BrandmeisterLastHeard {
   }
 
   _onConnect() {
-    console.log(`[BMLH] successfully connected to ${this.url}`);
+    log(`[BMLH] successfully connected to ${this.url}`);
     this.connected = true;
     this.handleConnectChange(this.connected);
   }
@@ -79,19 +80,19 @@ class BrandmeisterLastHeard {
   }
 
   _onDisconnect(reason) {
-    console.log(`[BMLH] disconnected from ${this.url}`);
+    log(`[BMLH] disconnected from ${this.url}`);
     this.connected = false;
     this.handleConnectChange(this.connected);
   }
 
   _onReconnect() {
-    console.log(`[BMLH] successfully reconnected to ${this.url}`);
+    log(`[BMLH] successfully reconnected to ${this.url}`);
     this.connected = true;
     this.handleConnectChange(this.connected);
   }
 
   _onReconnecting(attempt) {
-    console.log(`[BMLH] attempting to reconnect to ${this.url} (${attempt})`);
+    log(`[BMLH] attempting to reconnect to ${this.url} (${attempt})`);
     this.connected = false;
     this.handleConnectChange(this.connected);
   }
