@@ -5,10 +5,10 @@ BUILD_DIR=build
 BUCKET=gladdbiz-bmactivity
 
 # build scripts must have succeeded
-if [! "${TRAVIS_TEST_RESULT}" -eq "0" ] || ( exit 1 )
+[[ "${TRAVIS_TEST_RESULT}" -eq "0" ]] || ( exit 1 )
 
 # build must exist
-if [! -d ${BUILD_DIR} ] || ( exit 1 )
+[[ -d ${BUILD_DIR} ]] || ( exit 1 )
 
 # sync build with S3 bucket
 aws s3 sync ${BUILD_DIR} s3://${BUCKET} --delete
