@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ReactGA from 'react-ga';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import Header from './components/Header';
@@ -9,7 +10,7 @@ import LatestActivity from './components/LatestActivity';
 import { getDurationSeconds } from './util/session';
 import './App.css';
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
 
@@ -45,6 +46,10 @@ class App extends Component {
   handleConnectionBtn() {
     if (this.state.bmConnected) {
       // disconnect
+      if (process.env.NODE_ENV === 'production') {
+        ReactGA.event({ category: 'BM Connection', action: 'Disconnect' });
+      }
+
       this.bmlh.close();
 
       if (this.pruneIntervalId) {
@@ -52,6 +57,10 @@ class App extends Component {
       }
     } else {
       // connect
+      if (process.env.NODE_ENV === 'production') {
+        ReactGA.event({ category: 'BM Connection', action: 'Connect' });
+      }
+
       this.bmlh.open();
       this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
       this.setState({ startup: true });
@@ -92,9 +101,18 @@ class App extends Component {
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
-    this.bmlh.open();
 
-    this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
+    if (process.env.NODE_ENV === 'production') {
+      // only use analytics in prod
+      ReactGA.initialize('UA-121772253-1');
+      ReactGA.pageview(window.location.pathname);
+
+      // only open automatically in prod
+      this.bmlh.open();
+      this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
+    } else {
+      this.setState({ startup: false });
+    }
   }
 
   componentWillUnmount() {
