@@ -1,4 +1,4 @@
-# Brandmeister Hot Groups
+# Brandmeister Hot Groups [![Build status](https://travis-ci.com/alexgladd/bm-hotgroups.svg?branch=master)](https://travis-ci.com/alexgladd/bm-hotgroups)
 
 Simple SPA that aggregates the *last heard* stream from the Brandmeister DMR network to determine
 the most active talk groups, callsigns, etc.
