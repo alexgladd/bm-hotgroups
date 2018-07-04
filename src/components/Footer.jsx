@@ -13,7 +13,7 @@ export default function Footer(props) {
 
       <div className="Source">
         <a href="https://github.com/alexgladd/bm-hotgroups" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faGithub} /> by Alex Gladd
+        <FontAwesomeIcon icon={faGithub} /> Source
         </a>
       </div>
 
