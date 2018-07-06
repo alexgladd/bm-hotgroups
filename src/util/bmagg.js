@@ -122,7 +122,7 @@ class BrandmeisterAggregator {
     }
 
     tg.talkTime = tg.talkTime + session.duration;
-    tg.lastActive = session.Stop;
+    if (session.Stop > tg.lastActive) tg.lastActive = session.Stop;
     
     acc[tg.id] = tg;
     return acc;
@@ -146,7 +146,7 @@ class BrandmeisterAggregator {
     }
 
     cs.talkTime = cs.talkTime + session.duration;
-    cs.lastActive = session.Stop;
+    if (session.Stop > cs.lastActive) cs.lastActive = session.Stop;
 
     acc[cs.id] = cs;
     return acc;
