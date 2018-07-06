@@ -28,7 +28,6 @@ beforeEach(() => {
 
 it('accepts Session-Stop events in the window', () => {
   const s = getSession();
-  console.log(s);
   expect(agg.addSession(s)).toEqual(true);
   expect(agg.latestActivity).toHaveLength(1);
 });
