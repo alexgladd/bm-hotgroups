@@ -28,8 +28,11 @@ class BrandmeisterAggregator {
   }
 
   addSession(session) {
-    if (session.Event !== 'Session-Stop' || _.has(this.sessions, session.SessionID)) {
-      log('[BMAGG] Skipping session (not stop or duplicate ID)');
+    if (session.Event !== 'Session-Stop') {
+      log('[BMAGG] Skipping session (not stop)');
+      return false;
+    } else if (_.has(this.sessions, session.SessionID)) {
+      log('[BMAGG] Skipping session (duplicate ID)');
       return false;
     }
 
@@ -95,11 +98,11 @@ class BrandmeisterAggregator {
   }
 
   _windowFilter(now, session) {
-    return now.diff(moment.unix(session.Start), 'minutes') < this.window;
+    return now.diff(moment.unix(session.Stop), 'minutes') < this.window;
   }
 
   _maxWindowFilter(now, session) {
-    return now.diff(moment.unix(session.Start), 'minutes') < this.maxWindow;
+    return now.diff(moment.unix(session.Stop), 'minutes') < this.maxWindow;
   }
 
   _talkGroupReducer(acc, session) {
@@ -119,7 +122,7 @@ class BrandmeisterAggregator {
     }
 
     tg.talkTime = tg.talkTime + session.duration;
-    tg.lastActive = session.Stop;
+    if (session.Stop > tg.lastActive) tg.lastActive = session.Stop;
     
     acc[tg.id] = tg;
     return acc;
@@ -143,7 +146,7 @@ class BrandmeisterAggregator {
     }
 
     cs.talkTime = cs.talkTime + session.duration;
-    cs.lastActive = session.Stop;
+    if (session.Stop > cs.lastActive) cs.lastActive = session.Stop;
 
     acc[cs.id] = cs;
     return acc;
