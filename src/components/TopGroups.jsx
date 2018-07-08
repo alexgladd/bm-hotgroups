@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment';
 import _ from 'lodash';
+import FilterBar from './FilterBar';
+import Filter from './Filter';
+import { hasNameFilter, createNameFilter } from '../util/filters';
 import './TopGroups.css';
-import './Filters.css';
 import './Tables.css';
 
 const propTypes = {
@@ -19,15 +21,26 @@ export default class TopGroups extends React.Component {
     super(props);
 
     this.state = {
-      viewCount: 20
+      viewCount: 20,
+      namedOnly: false,
+      nameFilter: ''
     };
   }
 
   render() {
     const { talkGroups } = this.props;
-    const { viewCount } = this.state;
+    const { namedOnly, nameFilter, viewCount } = this.state;
 
-    let topGroups = talkGroups.map((tg, idx) => (
+    let filteredGroups = talkGroups;
+    if (namedOnly) {
+      filteredGroups = _.filter(filteredGroups, hasNameFilter);
+    }
+
+    if (!_.isEmpty(nameFilter)) {
+      filteredGroups = _.filter(filteredGroups, createNameFilter(nameFilter));
+    }
+
+    let topGroups = filteredGroups.map((tg, idx) => (
       <tr key={idx}>
         <td>{ tg.label }</td>
         <td>{ `${tg.talkTime} seconds` }</td>
@@ -47,7 +60,12 @@ export default class TopGroups extends React.Component {
       <div id="TopGroups">
         <h2><FontAwesomeIcon icon={faUsers} /> Top Talkgroups</h2>
 
-        <div className="Filters"></div>
+        <FilterBar>
+          <Filter type="checkbox" label="Has name" state={namedOnly}
+            onChange={ (e) => this.setState({ namedOnly: e.target.checked }) } />
+          <Filter type="text" label="Name" state={nameFilter}
+            onChange={ (e) => this.setState({ nameFilter: e.target.value }) } />
+        </FilterBar>
 
         <table>
           <thead><tr>
