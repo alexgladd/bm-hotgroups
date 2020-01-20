@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers } from '@fortawesome/free-solid-svg-icons'
-import moment from 'moment';
 import _ from 'lodash';
 import FilterBar from './FilterBar';
 import Filter from './Filter';
 import { hasNameFilter, createNameFilter } from '../util/filters';
+import { formatTime } from '../util/session';
 import './TopGroups.css';
 import './Tables.css';
 
@@ -44,7 +44,7 @@ export default class TopGroups extends React.Component {
       <tr key={idx}>
         <td>{ tg.label }</td>
         <td>{ `${tg.talkTime} seconds` }</td>
-        <td>{ moment.unix(tg.lastActive).format('ddd h:mm:ssa') }</td>
+        <td>{ formatTime(tg.lastActive) }</td>
       </tr>
     )).slice(0, viewCount);
 
@@ -61,9 +61,9 @@ export default class TopGroups extends React.Component {
         <h2><FontAwesomeIcon icon={faUsers} /> Top Talkgroups</h2>
 
         <FilterBar>
-          <Filter type="checkbox" label="Has name" state={namedOnly}
+          <Filter type="checkbox" label="Has group name" state={namedOnly}
             onChange={ (e) => this.setState({ namedOnly: e.target.checked }) } />
-          <Filter type="text" label="Name" state={nameFilter}
+          <Filter type="text" label="Group name" state={nameFilter}
             onChange={ (e) => this.setState({ nameFilter: e.target.value }) } />
         </FilterBar>
 

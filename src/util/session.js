@@ -21,6 +21,6 @@ export const getDurationSeconds = (session={Start:0,Stop:0}) => {
   return stop.diff(start, 'seconds');
 }
 
-export const formatTime = (unixTime=0, format='ddd h:mm:ssa') => {
+export const formatTime = (unixTime=0, format='ddd h:mm:ss a') => {
   return moment.unix(unixTime).format(format);
 }

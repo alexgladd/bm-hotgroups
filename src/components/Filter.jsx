@@ -34,8 +34,8 @@ export default class Filter extends React.Component {
 
     return (
       <div>
-        <label htmlFor={id}>Filter: </label>
-        <input type="text" id={id} placeholder={label} value={state} onChange={onChange} />
+        <label htmlFor={id}>{`${label}: `}</label>
+        <input type="text" id={id} placeholder={`Enter ${label}...`} value={state} onChange={onChange} />
       </div>
     );
   }

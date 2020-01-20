@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
+import { formatTime } from '../util/session';
 import './TopCallsigns.css';
-import './Filters.css';
 import './Tables.css';
 
 const propTypes = {
@@ -32,7 +31,7 @@ export default class TopCallsigns extends React.Component {
         <td>{ cs.label }</td>
         <td>{ cs.name }</td>
         <td>{ `${cs.talkTime} seconds` }</td>
-        <td>{ moment.unix(cs.lastActive).format('ddd h:mm:ssa') }</td>
+        <td>{ formatTime(cs.lastActive) }</td>
       </tr>
     )).slice(0, viewCount);
 
