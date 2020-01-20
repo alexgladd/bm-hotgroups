@@ -19,7 +19,7 @@ Contributions welcome! Note that all active development is done on the [develop]
 
 **Prerequisites**
 
-* Node.js 8.x
+* Node.js 12.x
 * Yarn
 
 **Setup**
