@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactGA from 'react-ga';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
@@ -27,6 +28,39 @@ export default class TopCallsigns extends React.Component {
       nameFilter: '',
       callsignFilter: ''
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // only run this logic in production
+    if (process.env.NODE_ENV !== 'production') return;
+
+    const { namedOnly, nameFilter, callsignOnly, callsignFilter } = this.state;
+
+    if (namedOnly !== prevState.namedOnly) {
+      // console.log(`Named Only ${namedOnly}`)
+      ReactGA.event({ category: 'Top Callsigns Filters', action: `Named Only ${namedOnly}` });
+    }
+
+    if (callsignOnly !== prevState.callsignOnly) {
+      // console.log(`Callsign Only ${callsignOnly}`)
+      ReactGA.event({ category: 'Top Callsigns Filters', action: `Callsign Only ${callsignOnly}` });
+    }
+
+    if (!_.isEmpty(nameFilter) && _.isEmpty(prevState.nameFilter)) {
+      // console.log('Name filter added')
+      ReactGA.event({ category: 'Top Callsigns Filters', action: 'Name filter added' });
+    } else if (_.isEmpty(nameFilter) && !_.isEmpty(prevState.nameFilter)) {
+      // console.log('Name filter removed');
+      ReactGA.event({ category: 'Top Callsigns Filters', action: 'Name filter removed' });
+    }
+
+    if (!_.isEmpty(callsignFilter) && _.isEmpty(prevState.callsignFilter)) {
+      // console.log('Callsign filter added')
+      ReactGA.event({ category: 'Top Callsigns Filters', action: 'Callsign filter added' });
+    } else if (_.isEmpty(callsignFilter) && !_.isEmpty(prevState.callsignFilter)) {
+      // console.log('Callsign filter removed');
+      ReactGA.event({ category: 'Top Callsigns Filters', action: 'Callsign filter removed' });
+    }
   }
 
   render() {

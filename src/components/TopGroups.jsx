@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers } from '@fortawesome/free-solid-svg-icons'
+import ReactGA from 'react-ga';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 import FilterBar from './FilterBar';
 import Filter from './Filter';
@@ -25,6 +26,26 @@ export default class TopGroups extends React.Component {
       namedOnly: false,
       nameFilter: ''
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // only run this logic in production
+    if (process.env.NODE_ENV !== 'production') return;
+
+    const { namedOnly, nameFilter } = this.state;
+
+    if (namedOnly !== prevState.namedOnly) {
+      // console.log(`Named Only ${namedOnly}`)
+      ReactGA.event({ category: 'Top Groups Filters', action: `Named Only ${namedOnly}` });
+    }
+
+    if (!_.isEmpty(nameFilter) && _.isEmpty(prevState.nameFilter)) {
+      // console.log('Name filter added')
+      ReactGA.event({ category: 'Top Groups Filters', action: 'Name filter added' });
+    } else if (_.isEmpty(nameFilter) && !_.isEmpty(prevState.nameFilter)) {
+      // console.log('Name filter removed');
+      ReactGA.event({ category: 'Top Groups Filters', action: 'Name filter removed' });
+    }
   }
 
   render() {
