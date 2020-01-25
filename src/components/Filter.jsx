@@ -21,22 +21,23 @@ export default class Filter extends React.Component {
     const id = `cb-${label}`;
 
     return (
-      <div>
+      <React.Fragment>
         <input type="checkbox" id={id} checked={state} onChange={onChange} />
         <label htmlFor={id}>{label}</label>
-      </div>
+      </React.Fragment>
     );
   }
 
   renderTextbox() {
     const { label, state, onChange } = this.props;
-    const id = `cb-${label}`;
+    const id = `txt-${label}`;
 
     return (
-      <div>
+      <React.Fragment>
         <label htmlFor={id}>{`${label}: `}</label>
-        <input type="text" id={id} placeholder={`Enter ${label}...`} value={state} onChange={onChange} />
-      </div>
+        <input type="text" id={id} placeholder={`Enter ${label}...`} spellCheck="false"
+          value={state} onChange={onChange} />
+      </React.Fragment>
     );
   }
 
