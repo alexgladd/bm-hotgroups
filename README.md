@@ -19,7 +19,7 @@ Contributions welcome! Note that all active development is done on the [develop]
 
 **Prerequisites**
 
-* Node.js 8.x
+* Node.js 12.x
 * Yarn
 
 **Setup**
@@ -34,6 +34,6 @@ Contributions welcome! Note that all active development is done on the [develop]
 
 ## License
 
-Copyright (c) 2018 Alex Gladd
+Copyright (c) 2020 Alex Gladd
 
 This project is offered under the [MIT license](LICENSE.md)

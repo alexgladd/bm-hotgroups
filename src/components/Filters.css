@@ -6,5 +6,65 @@ Common filters styles
   display: flex;
   justify-content: center;
   margin: 0 auto;
+}
+
+.Filter {
+  color: #f6f1f2;
+  font-size: 0.75rem;
+  margin: 6px;
+  padding: 4px 6px;
   background-color: #898695;
+  border: 1px solid #898695;
+  border-radius: 6px;
+}
+
+.Filter input[type="checkbox"] {
+  opacity: 0;
+}
+.Filter input[type="checkbox"] + label {
+  position: relative;
+  padding-left: 18px;
+  margin-left: -18px;
+}
+.Filter label::before {
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  content: "";
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border: 2px solid #de9e8e;
+  border-radius: 4px;
+  background-color: #f6f1f2;
+}
+.Filters label:after {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  content: "";
+  display: inline-block;
+  height: 4px;
+  width: 8px;
+  border-left: 2px solid #f6f1f2;
+  border-bottom: 2px solid #f6f1f2;
+  transform: rotate(-45deg);
+}
+.Filter input[type="checkbox"] + label::after {
+  content: none;
+}
+.Filter input[type="checkbox"]:checked + label::after {
+  content: "";
+}
+.Filter input[type="checkbox"]:checked + label::before {
+  background-color: #de9e8e;
+}
+
+.Filter input[type="text"] {
+  border: 2px solid #de9e8e;
+  border-radius: 4px;
+  background-color: #f6f1f2;
+}
+.Filter input[type="text"]:focus {
+  outline: none;
 }
