@@ -4,7 +4,7 @@ Header styles
 
 #Header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   position: fixed;
   top: 0;
   width: 100vw;
@@ -16,7 +16,7 @@ Header styles
 
 #Header h1 {
   flex: 1 1 auto;
-  font-size: 1.25rem;
+  font-size: 26px;
   margin: 0;
 }
 
