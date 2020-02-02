@@ -20,12 +20,11 @@ Contributions welcome! Note that all active development is done on the [develop]
 **Prerequisites**
 
 * Node.js 12.x
-* Yarn
 
 **Setup**
 
 1. Fork this repo and clone locally
-1. Install dependencies `yarn install`
+1. Install dependencies `npm install`
 1. Switch to the develop branch `git checkout develop`
 1. Create and checkout your own feature branch `git checkout -b my-new-feature`
 1. Build your feature or bugfix and commit your changes locally

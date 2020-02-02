@@ -11,11 +11,12 @@ Theme: http://colormind.io/bootstrap/
 
 #App {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
-    "sessions sessions"
-    "groups calls";
+    "sessions"
+    "groups"
+    "calls";
   margin: 72px 12px;
 }
 
@@ -62,4 +63,14 @@ Theme: http://colormind.io/bootstrap/
 
 .Label.Danger {
   background-color: hsl(4, 90%, 58%);
+}
+
+@media screen and (min-width: 1440px) {
+  #App {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "sessions sessions"
+      "groups calls";
+  }
 }
