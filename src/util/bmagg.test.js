@@ -4,7 +4,7 @@ import moment from 'moment';
 
 let agg = new bmagg(1, 2);
 
-const getSession = (id=1, stopOffset=30, duration=60, now=moment()) => {
+const getSession = (id='abcd', stopOffset=30, duration=60, now=moment()) => {
   return { 
     DestinationCall: "D1CALL",
     DestinationID: 1111111,
@@ -18,7 +18,8 @@ const getSession = (id=1, stopOffset=30, duration=60, now=moment()) => {
     SourceID: 3333333,
     SourceName: "SNAME",
     Start: now.unix() - (stopOffset + duration),
-    Stop: now.unix() - stopOffset
+    Stop: now.unix() - stopOffset,
+    localStop: now.unix() - stopOffset
   };
 }
 
@@ -40,32 +41,32 @@ it('rejects non-Session-Stop events in the window', () => {
 });
 
 it('rejects duplicate session IDs', () => {
-  const s1 = getSession(1);
-  const s2 = getSession(1);
+  const s1 = getSession('abcd');
+  const s2 = getSession('abcd');
   agg.addSession(s1);
   expect(agg.addSession(s2)).toEqual(false);
   expect(agg.latestActivity).toHaveLength(1);
 });
 
 it('adds session stopping on the window edge to latest activity', () => {
-  expect(agg.addSession(getSession(1, 59))).toEqual(true);
+  expect(agg.addSession(getSession('window-edge', 59))).toEqual(true);
   expect(agg.latestActivity).toHaveLength(1);
 });
 
 it("doesn't add sessions stopping outside the window to latest activity", () => {
-  expect(agg.addSession(getSession(1, 60))).toEqual(false);
+  expect(agg.addSession(getSession('window-outside', 60))).toEqual(false);
   expect(agg.latestActivity).toHaveLength(0);
 });
 
 it('calculates the correct session duration', () => {
   const duration = 25;
-  agg.addSession(getSession(1, 10, duration));
+  agg.addSession(getSession('duration', 10, duration));
   expect(agg.latestActivity[0].duration).toEqual(duration);
 });
 
 it('aggregates talkgroup IDs', () => {
-  const s1 = getSession(1, 20, 5); s1.DestinationID = 1111111;
-  const s2 = getSession(2, 10, 10); s2.DestinationID = 2222222;
+  const s1 = getSession('tg1-agg', 20, 5); s1.DestinationID = 1111111;
+  const s2 = getSession('tg2-agg', 10, 10); s2.DestinationID = 2222222;
   agg.addSession(s1);
   agg.addSession(s2);
   expect(agg.topTalkGroups).toHaveLength(2);
@@ -75,8 +76,8 @@ it('aggregates talkgroup IDs', () => {
 
 it('updates talkgroup aggregations correctly', () => {
   const now = moment();
-  const s1 = getSession(1, 40, 5, now);
-  const s2 = getSession(2, 10, 10, now);
+  const s1 = getSession('tg1-update', 40, 5, now);
+  const s2 = getSession('tg2-update', 10, 10, now);
   agg.addSession(s1);
   agg.addSession(s2);
   expect(agg.topTalkGroups).toHaveLength(1);
@@ -85,8 +86,8 @@ it('updates talkgroup aggregations correctly', () => {
 });
 
 it('aggregates callsigns', () => {
-  const s1 = getSession(1, 20, 5); s1.SourceID = 3333333;
-  const s2 = getSession(2, 10, 10); s2.SourceID = 4444444;
+  const s1 = getSession('cs1-agg', 20, 5); s1.SourceID = 3333333;
+  const s2 = getSession('cs2-agg', 10, 10); s2.SourceID = 4444444;
   agg.addSession(s1);
   agg.addSession(s2);
   expect(agg.topCallsigns).toHaveLength(2);
@@ -96,8 +97,8 @@ it('aggregates callsigns', () => {
 
 it('updates callsign aggregations correctly', () => {
   const now = moment();
-  const s1 = getSession(1, 40, 5, now);
-  const s2 = getSession(2, 10, 10, now);
+  const s1 = getSession('cs1-update', 40, 5, now);
+  const s2 = getSession('cs2-update', 10, 10, now);
   agg.addSession(s1);
   agg.addSession(s2);
   expect(agg.topCallsigns).toHaveLength(1);

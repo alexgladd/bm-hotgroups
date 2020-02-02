@@ -9,7 +9,7 @@ const BM_DEFAULT_OPTS = {
   reconnection: true
 };
 
-class BrandmeisterLastHeard {
+export default class BrandmeisterLastHeard {
   constructor(url=BM_DEFAULT_URL, options=BM_DEFAULT_OPTS) {
     this.connected = false;
     this.url = url;
@@ -107,5 +107,3 @@ class BrandmeisterLastHeard {
     console.error(`[BMLH] socket error on ${this.url}`, err);
   }
 }
-
-export default BrandmeisterLastHeard;

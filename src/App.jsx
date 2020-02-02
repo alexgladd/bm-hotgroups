@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactGA from 'react-ga';
+import moment from 'moment';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import Header from './components/Header';
@@ -27,7 +28,7 @@ class App extends React.Component {
     this.bmagg = new BMAgg(2, 3);
 
     this.updateAggregations = this.updateAggregations.bind(this);
-    this.handleMqttMsg = this.handleMqttMsg.bind(this);
+    this.handleStopMsg = this.handleStopMsg.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
     this.handleAggregatorPrune = this.handleAggregatorPrune.bind(this);
@@ -77,8 +78,11 @@ class App extends React.Component {
     }
   }
 
-  handleMqttMsg(msg) {
+  handleStopMsg(msg) {
     log('Session stop received', msg);
+
+    // add local stop time
+    msg.localStop = moment().unix();
 
     if (this.bmagg.addSession(msg)) {
       this.updateAggregations();
@@ -101,7 +105,7 @@ class App extends React.Component {
     };
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
-    this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
+    this.bmlh.onMqtt(this.handleStopMsg, true, msgFilter);
 
     if (process.env.NODE_ENV === 'production') {
       // only use analytics in prod

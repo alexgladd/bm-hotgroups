@@ -5,7 +5,7 @@ import moment from 'moment';
 import log from './logger';
 import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds } from './session';
 
-class BrandmeisterAggregator {
+export default class BrandmeisterAggregator {
   constructor(windowMins=10, maxWindowMins=30) {
     this.window = windowMins;
     this.maxWindow = maxWindowMins;
@@ -43,7 +43,7 @@ class BrandmeisterAggregator {
 
     if (this._windowFilter(moment(), session)) {
       this.windowedSessions.push(this.sessions[session.SessionID]);
-      this.windowedSessions = _.orderBy(this.windowedSessions, ['Stop'], ['desc']);
+      this.windowedSessions = _.orderBy(this.windowedSessions, ['localStop'], ['desc']);
 
       log('[BMAGG] Windowed sessions', this.windowedSessions);
       this.reaggregate();
@@ -98,11 +98,11 @@ class BrandmeisterAggregator {
   }
 
   _windowFilter(now, session) {
-    return now.diff(moment.unix(session.Stop), 'minutes') < this.window;
+    return now.diff(moment.unix(session.localStop), 'minutes') < this.window;
   }
 
   _maxWindowFilter(now, session) {
-    return now.diff(moment.unix(session.Stop), 'minutes') < this.maxWindow;
+    return now.diff(moment.unix(session.localStop), 'minutes') < this.maxWindow;
   }
 
   _talkGroupReducer(acc, session) {
@@ -122,7 +122,7 @@ class BrandmeisterAggregator {
     }
 
     tg.talkTime = tg.talkTime + session.duration;
-    if (session.Stop > tg.lastActive) tg.lastActive = session.Stop;
+    if (session.localStop > tg.lastActive) tg.lastActive = session.localStop;
     
     acc[tg.id] = tg;
     return acc;
@@ -146,11 +146,9 @@ class BrandmeisterAggregator {
     }
 
     cs.talkTime = cs.talkTime + session.duration;
-    if (session.Stop > cs.lastActive) cs.lastActive = session.Stop;
+    if (session.localStop > cs.lastActive) cs.lastActive = session.localStop;
 
     acc[cs.id] = cs;
     return acc;
   }
 }
-
-export default BrandmeisterAggregator;
