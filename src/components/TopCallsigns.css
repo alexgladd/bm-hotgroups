@@ -3,7 +3,7 @@ TopGroups styles
 */
 
 #TopCallsigns {
-  grid-area: calls;
+  grid-area: top-calls;
   margin: 0 12px;
 }
 

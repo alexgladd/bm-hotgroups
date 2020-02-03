@@ -12,11 +12,12 @@ Theme: http://colormind.io/bootstrap/
 #App {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   grid-template-areas:
-    "sessions"
     "groups"
-    "calls";
+    "top-groups"
+    "calls"
+    "top-calls";
   margin: 72px 12px;
 }
 
@@ -70,7 +71,7 @@ Theme: http://colormind.io/bootstrap/
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     grid-template-areas:
-      "sessions sessions"
-      "groups calls";
+      "groups calls"
+      "top-groups top-calls";
   }
 }

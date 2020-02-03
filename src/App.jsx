@@ -3,11 +3,13 @@ import ReactGA from 'react-ga';
 import moment from 'moment';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
+import BMAct from './util/bmactive';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
-import LatestActivity from './components/LatestActivity';
+import { ActiveGroups, ActiveCallsigns } from './components/Actives';
+// import LatestActivity from './components/LatestActivity';
 import log from './util/logger';
 import { getDurationSeconds } from './util/session';
 import './App.css';
@@ -19,19 +21,34 @@ class App extends React.Component {
     this.state = {
       startup: true,
       bmConnected: false,
+      activeGroups: [],
       topGroups: [],
+      activeCallsigns: [],
       topCallsigns: [],
       latestSessions: []
     };
 
     this.bmlh = new BMLH();
+    this.bmact = new BMAct();
     this.bmagg = new BMAgg(2, 3);
 
+    this.updateActives = this.updateActives.bind(this);
     this.updateAggregations = this.updateAggregations.bind(this);
+    this.handleStartMsg = this.handleStartMsg.bind(this);
     this.handleStopMsg = this.handleStopMsg.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
     this.handleAggregatorPrune = this.handleAggregatorPrune.bind(this);
+  }
+
+  updateActives() {
+    log('Active TGs', this.bmact.activeTalkgroups);
+    log('Active Callsigns', this.bmact.activeCallsigns);
+
+    this.setState({
+      activeGroups: this.bmact.activeTalkgroups,
+      activeCallsigns: this.bmact.activeCallsigns,
+    });
   }
 
   updateAggregations() {
@@ -63,6 +80,7 @@ class App extends React.Component {
         ReactGA.event({ category: 'BM Connection', action: 'Connect' });
       }
 
+      this.bmact.reset();
       this.bmlh.open();
       this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
       this.setState({ startup: true });
@@ -78,11 +96,26 @@ class App extends React.Component {
     }
   }
 
+  handleStartMsg(msg) {
+    log('Session start received', msg);
+
+    // add local start time
+    msg.localStart = moment().unix();
+
+    if (this.bmact.addSessionStart(msg)) {
+      this.updateActives();
+    }
+  }
+
   handleStopMsg(msg) {
     log('Session stop received', msg);
 
     // add local stop time
     msg.localStop = moment().unix();
+
+    if (this.bmact.addSessionStop(msg)) {
+      this.updateActives();
+    }
 
     if (this.bmagg.addSession(msg)) {
       this.updateAggregations();
@@ -96,7 +129,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const msgFilter = (msg) => {
+    const startMsgFilter = (msg) => {
+      return msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Start';
+    };
+
+    const stopMsgFilter = (msg) => {
       if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
         return getDurationSeconds(msg) > 0;
       } else {
@@ -105,7 +142,8 @@ class App extends React.Component {
     };
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
-    this.bmlh.onMqtt(this.handleStopMsg, true, msgFilter);
+    this.bmlh.onMqtt(this.handleStartMsg, true, startMsgFilter);
+    this.bmlh.onMqtt(this.handleStopMsg, false, stopMsgFilter);
 
     if (process.env.NODE_ENV === 'production') {
       // only use analytics in prod
@@ -129,7 +167,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { startup, bmConnected, topGroups, topCallsigns, latestSessions } = this.state;
+    const { startup, bmConnected, activeGroups, topGroups, activeCallsigns, topCallsigns } = this.state;
 
     return (
       <React.Fragment>
@@ -139,7 +177,9 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
-          <LatestActivity sessions={latestSessions} />
+          {/* <LatestActivity sessions={latestSessions} /> */}
+          <ActiveGroups groups={activeGroups} />
+          <ActiveCallsigns callsigns={activeCallsigns} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
         </main>

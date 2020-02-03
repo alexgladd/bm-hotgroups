@@ -1,0 +1,24 @@
+/* Actives styles */
+
+.Actives {
+  margin: 0 12px 12px 12px;
+}
+.Actives h2 {
+  text-align: center;
+}
+
+.ActiveItems {
+  display: flex;
+  flex-flow: row wrap;
+}
+.ActiveItems div {
+  margin: 4px;
+}
+
+#ActiveGroups {
+  grid-area: groups;
+}
+
+#ActiveCallsigns {
+  grid-area: calls;
+}

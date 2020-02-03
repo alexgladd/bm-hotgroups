@@ -3,7 +3,7 @@ TopGroups styles
 */
 
 #TopGroups {
-  grid-area: groups;
+  grid-area: top-groups;
   margin: 0 12px;
 }
 
