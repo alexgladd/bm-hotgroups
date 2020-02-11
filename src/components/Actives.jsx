@@ -1,6 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { getActiveSeconds } from '../util/session';
 import './Actives.css';
 
 const Actives = ({ name, icon, id, children }) => (
@@ -14,12 +16,12 @@ const Actives = ({ name, icon, id, children }) => (
 
 export const ActiveGroups = ({ groups }) => (
   <Actives name="Talkgroups" icon={faUsers} id="ActiveGroups">
-    { groups.map(tg => <div>{ tg.name }</div>) }
+    { groups.map(tg => <div>{ `${tg.label} (${getActiveSeconds(tg, moment())}s)` }</div>) }
   </Actives>
 )
 
 export const ActiveCallsigns = ({ callsigns }) => (
   <Actives name="Callsigns" icon={faUser} id="ActiveCallsigns">
-    { callsigns.map(c => <div>{ c.callsign }</div>) }
+    { callsigns.map(c => <div>{ `${c.label} (${getActiveSeconds(c, moment())}s)` }</div>) }
   </Actives>
 )

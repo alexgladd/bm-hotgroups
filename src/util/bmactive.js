@@ -1,9 +1,8 @@
 // Brandmeister currently active tracker
 
 import _ from 'lodash';
-import moment from 'moment';
 import log from './logger';
-import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds } from './session';
+import { getTalkGroupLabel, getCallsignLabel } from './session';
 
 export default class BrandmeisterActives {
   constructor() {
@@ -86,6 +85,7 @@ export default class BrandmeisterActives {
     return {
       id: session.DestinationID,
       name: session.DestinationName,
+      label: getTalkGroupLabel(session),
       localStart: session.localStart
     };
   }
@@ -95,6 +95,7 @@ export default class BrandmeisterActives {
       id: session.SourceID,
       callsign: session.SourceCall,
       name: session.SourceName,
+      label: getCallsignLabel(session),
       localStart: session.localStart
     };
   }
