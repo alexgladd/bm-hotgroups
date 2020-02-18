@@ -10,12 +10,11 @@
 .ActiveItems {
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-around;
   align-content: flex-start;
-  height: 15vh;
+  height: 16vh;
+  padding: 0 4px;
   overflow: hidden scroll;
-  border-width: 4px;
-  border-style: solid;
-  border-image: linear-gradient(to bottom, #898695, #F6F1F2) 0 0 0 4;
 }
 .ActiveItems div {
   margin: 4px;
