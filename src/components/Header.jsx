@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBroadcastTower } from '@fortawesome/free-solid-svg-icons'
+import { faBroadcastTower, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './Header.css';
 
 const propTypes = {
@@ -36,8 +36,13 @@ export default class Header extends React.Component {
         </div>
 
         { connected ?
-          <div className="Label Success">connected</div> :
-          <div className="Label Danger">disconnected</div>
+          <div className="Status On" title="Connected to Brandmeister">
+            <FontAwesomeIcon fixedWidth icon={faCheckCircle} />
+          </div>
+          :
+          <div className="Status Off" title="Disconnected from Brandmeister">
+            <FontAwesomeIcon fixedWidth icon={faTimesCircle} />
+          </div>
         }
       </header>
     );

@@ -23,3 +23,22 @@ Header styles
 #Header .ConnectBtn {
   margin-right: 24px;
 }
+
+#Header .Status {
+  display: inline-block;
+  color: #ffffff;
+  background-color: hsl(0, 0%, 60%);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  text-align: center;
+  font-size: 24px;
+}
+
+#Header .Status.On {
+  background-color: hsl(81, 33%, 43%);
+}
+
+#Header .Status.Off {
+  background-color: hsl(4, 90%, 58%);
+}
