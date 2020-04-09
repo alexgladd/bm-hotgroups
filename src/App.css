@@ -31,6 +31,8 @@ Theme: http://colormind.io/bootstrap/
   text-align: center;
   text-transform: uppercase;
   font-size: 12px;
+  transition:
+    background-color 250ms ease-in;
 }
 .Button:hover {
   background-color: hsl(0, 0%, 65%);
@@ -40,10 +42,10 @@ Theme: http://colormind.io/bootstrap/
 }
 
 .Button.Primary {
-  background-color: hsl(7, 71%, 54%);
+  background-color: hsla(0, 0%, 100%, 0.1);
 }
 .Button.Primary:hover {
-  background-color: hsl(7, 71%, 59%);
+  background-color: hsla(0, 0%, 100%, 0.2);
 }
 
 .Label {
