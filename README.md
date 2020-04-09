@@ -1,6 +1,9 @@
 # Brandmeister Top Activity
 
-Master: [![Build status](https://travis-ci.com/alexgladd/bm-hotgroups.svg?branch=master)](https://travis-ci.com/alexgladd/bm-hotgroups) Develop: [![Build status](https://travis-ci.com/alexgladd/bm-hotgroups.svg?branch=develop)](https://travis-ci.com/alexgladd/bm-hotgroups)
+<p align="center">
+  <img src="https://github.com/alexgladd/bm-hotgroups/workflows/CI/badge.svg?branch=develop">&nbsp;
+  <img src="https://github.com/alexgladd/bm-hotgroups/workflows/Deployment/badge.svg">
+</p>
 
 Simple SPA that aggregates the *last heard* stream from the Brandmeister DMR network to show
 the most active talk groups, callsigns, etc.
