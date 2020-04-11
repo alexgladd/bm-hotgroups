@@ -115,7 +115,7 @@ export default class BrandmeisterAggregator {
       tg = {
         id: session.DestinationID,
         name: session.DestinationName,
-        label: getTalkGroupLabel(session),
+        label: getTalkGroupLabel(session, true),
         talkTime: 0,
         lastActive: 0
       };
@@ -138,7 +138,7 @@ export default class BrandmeisterAggregator {
       cs = {
         id: session.SourceID,
         callsign: session.SourceCall,
-        label: getCallsignLabel(session),
+        label: getCallsignLabel(session, true),
         name: session.SourceName,
         talkTime: 0,
         lastActive: 0

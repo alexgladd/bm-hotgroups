@@ -68,6 +68,11 @@ Theme: http://colormind.io/bootstrap/
   background-color: hsl(4, 90%, 58%);
 }
 
+.Subtext {
+  color: #898695;
+  font-size: 0.9em;
+}
+
 @media screen and (min-width: 1440px) {
   #App {
     grid-template-columns: 1fr 1fr;
