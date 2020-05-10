@@ -16,12 +16,12 @@ const Actives = ({ name, icon, id, children }) => (
 
 export const ActiveGroups = ({ groups }) => (
   <Actives name="Talkgroups" icon={faUsers} id="ActiveGroups">
-    { groups.map(tg => <div>{ `${tg.label} (${getActiveSeconds(tg, moment())}s)` }</div>) }
+    { groups.map(tg => <div key={tg.id}>{ `${tg.label} (${getActiveSeconds(tg, moment())}s)` }</div>) }
   </Actives>
 )
 
 export const ActiveCallsigns = ({ callsigns }) => (
   <Actives name="Callsigns" icon={faUser} id="ActiveCallsigns">
-    { callsigns.map(c => <div>{ `${c.label} (${getActiveSeconds(c, moment())}s)` }</div>) }
+    { callsigns.map(c => <div key={c.id}>{ `${c.label} (${getActiveSeconds(c, moment())}s)` }</div>) }
   </Actives>
 )
