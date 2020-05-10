@@ -4,7 +4,7 @@ TopGroups styles
 
 #TopGroups {
   grid-area: top-groups;
-  margin: 0 12px;
+  padding: 0 12px;
 }
 
 #TopGroups h2 {

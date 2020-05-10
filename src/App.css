@@ -18,7 +18,9 @@ Theme: http://colormind.io/bootstrap/
     "top-groups"
     "calls"
     "top-calls";
-  margin: 72px 12px;
+  margin-top: 6rem;
+  margin-bottom: 3rem;
+  padding: 0 12px;
 }
 
 .Button {
@@ -71,6 +73,12 @@ Theme: http://colormind.io/bootstrap/
 .Subtext {
   color: #898695;
   font-size: 0.9em;
+}
+
+@media screen and (min-width: 768px) {
+  #App {
+    margin-top: 4rem;
+  }
 }
 
 @media screen and (min-width: 1440px) {

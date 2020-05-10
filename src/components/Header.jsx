@@ -26,24 +26,26 @@ export default class Header extends React.Component {
           <FontAwesomeIcon icon={faBroadcastTower} />&nbsp;&nbsp;Brandmeister Top Activity
         </h1>
 
-        <div className="ConnectBtn">
-        { enabled ?
-          <button className="Button Primary" onClick={onConnectionClick}>
-            { connected ? 'Disconnect' : 'Connect' }
-          </button> :
-          'Connecting...'
-        }
-        </div>
+        <div id="Controls">
+          <div className="ConnectBtn">
+          { enabled ?
+            <button className="Button Primary" onClick={onConnectionClick}>
+              { connected ? 'Disconnect' : 'Connect' }
+            </button> :
+            'Connecting...'
+          }
+          </div>
 
-        { connected ?
-          <div className="Status On" title="Connected to Brandmeister">
-            <FontAwesomeIcon fixedWidth icon={faCheckCircle} />
-          </div>
-          :
-          <div className="Status Off" title="Disconnected from Brandmeister">
-            <FontAwesomeIcon fixedWidth icon={faTimesCircle} />
-          </div>
-        }
+          { connected ?
+            <div className="Status On" title="Connected to Brandmeister">
+              <FontAwesomeIcon fixedWidth icon={faCheckCircle} />
+            </div>
+            :
+            <div className="Status Off" title="Disconnected from Brandmeister">
+              <FontAwesomeIcon fixedWidth icon={faTimesCircle} />
+            </div>
+          }
+        </div>
       </header>
     );
   }

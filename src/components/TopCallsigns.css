@@ -4,7 +4,7 @@ TopGroups styles
 
 #TopCallsigns {
   grid-area: top-calls;
-  margin: 0 12px;
+  padding: 0 12px;
 }
 
 #TopCallsigns h2 {
