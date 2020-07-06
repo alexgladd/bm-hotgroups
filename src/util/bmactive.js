@@ -9,6 +9,10 @@ export default class BrandmeisterActives {
     this.reset();
   }
 
+  get activeSessions() {
+    return this.aSessions;
+  }
+
   get activeTalkgroups() {
     return this.talkgroups;
   }
@@ -27,7 +31,7 @@ export default class BrandmeisterActives {
     } else {
       this._addActiveSession(session);
       this._updateActives();
-      log('[BMACT] Active sessions', this.sessions);
+      log('[BMACT] Active sessions', this.aSessions);
       log('[BMACT] Active TGs', this.talkgroups);
       log('[BMACT] Active Callsigns', this.callsigns);
       return true;
@@ -77,8 +81,23 @@ export default class BrandmeisterActives {
   _updateActives() {
     const actSessions = _.values(this.sessions);
 
+    this.aSessions = _.map(actSessions, this._sessionMapper);
     this.talkgroups = _.map(actSessions, this._talkgroupMapper);
     this.callsigns = _.map(actSessions, this._callsignMapper);
+  }
+
+  _sessionMapper(session) {
+    return {
+      id: session.SessionID,
+      srcId: session.SourceID,
+      dstId: session.DestinationID,
+      callsign: session.SourceCall,
+      callsignName: session.SourceName,
+      callsignLabel: getCallsignLabel(session),
+      talkgroup: session.DestinationName,
+      talkgroupLabel: getTalkGroupLabel(session),
+      localStart: session.localStart,
+    };
   }
 
   _talkgroupMapper(session) {

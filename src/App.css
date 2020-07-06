@@ -14,10 +14,10 @@ Theme: http://colormind.io/bootstrap/
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto auto;
   grid-template-areas:
-    "groups"
+    "actives"
     "top-groups"
-    "calls"
     "top-calls";
+  gap: 24px;
   margin-top: 6rem;
   margin-bottom: 3rem;
   padding: 0 12px;
@@ -86,7 +86,10 @@ Theme: http://colormind.io/bootstrap/
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     grid-template-areas:
-      "groups calls"
+      "actives actives"
       "top-groups top-calls";
+    /* grid-template-areas:
+      "groups calls"
+      "top-groups top-calls"; */
   }
 }

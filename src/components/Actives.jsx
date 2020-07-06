@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { getActiveSeconds } from '../util/session';
 import './Actives.css';
 

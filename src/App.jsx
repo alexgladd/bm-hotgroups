@@ -13,6 +13,7 @@ import { ActiveGroups, ActiveCallsigns } from './components/Actives';
 import log from './util/logger';
 import { getDurationSeconds } from './util/session';
 import './App.css';
+import CurrentlyActive from './components/CurrentlyActive';
 
 class App extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class App extends React.Component {
     this.state = {
       startup: true,
       bmConnected: false,
+      activeSessions: [],
       activeGroups: [],
       topGroups: [],
       activeCallsigns: [],
@@ -46,6 +48,7 @@ class App extends React.Component {
     log('Active Callsigns', this.bmact.activeCallsigns);
 
     this.setState({
+      activeSessions: this.bmact.activeSessions,
       activeGroups: this.bmact.activeTalkgroups,
       activeCallsigns: this.bmact.activeCallsigns,
     });
@@ -167,7 +170,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { startup, bmConnected, activeGroups, topGroups, activeCallsigns, topCallsigns } = this.state;
+    const { startup, bmConnected, activeSessions, activeGroups, topGroups, activeCallsigns, topCallsigns } = this.state;
 
     return (
       <React.Fragment>
@@ -177,9 +180,7 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
-          {/* <LatestActivity sessions={latestSessions} /> */}
-          <ActiveGroups groups={activeGroups} />
-          <ActiveCallsigns callsigns={activeCallsigns} />
+          <CurrentlyActive sessions={activeSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
         </main>

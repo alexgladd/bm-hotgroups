@@ -1,8 +1,5 @@
 /* Actives styles */
 
-.Actives {
-  padding: 0 12px 12px 12px;
-}
 .Actives h2 {
   text-align: center;
 }
@@ -17,7 +14,7 @@
   overflow: hidden scroll;
 }
 .ActiveItems div {
-  margin: 4px;
+  margin: 4px 8px;
 }
 
 #ActiveGroups {
@@ -26,4 +23,8 @@
 
 #ActiveCallsigns {
   grid-area: calls;
+}
+
+#CurrentlyActive {
+  grid-area: actives;
 }
