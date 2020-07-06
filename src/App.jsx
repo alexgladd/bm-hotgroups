@@ -8,8 +8,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
-import { ActiveGroups, ActiveCallsigns } from './components/Actives';
-// import LatestActivity from './components/LatestActivity';
 import log from './util/logger';
 import { getDurationSeconds } from './util/session';
 import './App.css';
@@ -170,7 +168,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { startup, bmConnected, activeSessions, activeGroups, topGroups, activeCallsigns, topCallsigns } = this.state;
+    const { startup, bmConnected, activeSessions, topGroups, topCallsigns } = this.state;
 
     return (
       <React.Fragment>
