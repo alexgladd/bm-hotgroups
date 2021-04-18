@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { orderBy } from 'lodash';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
@@ -13,13 +14,18 @@ const propTypes = {
 const defaultProps = {};
 
 export default function CurrentlyActive({ sessions }) {
+  const now = moment();
+  const aSessions = orderBy(
+    sessions.map((s) => ({ ...s, activeSeconds: getActiveSeconds(s, now) })),
+    ['activeSeconds'], ['desc']);
+
   return (
     <div id="CurrentlyActive" className="Actives">
-      <h2><FontAwesomeIcon icon={faMicrophone} /> Currently Active</h2>
+      <h2><FontAwesomeIcon icon={faMicrophone} /> Currently Active {`(${sessions.length})`}</h2>
       <div className="ActiveItems">
-        { sessions.map((s) => (
+        { aSessions.map((s) => (
           <div key={s.id}>
-            {s.callsignLabel} &rArr; {s.talkgroupLabel} {`(${getActiveSeconds(s, moment())}s)`}
+            {s.callsignLabel} &rArr; {s.talkgroupLabel} {`(${s.activeSeconds}s)`}
           </div>
         ))}
       </div>

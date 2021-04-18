@@ -29,8 +29,8 @@ class App extends React.Component {
     };
 
     this.bmlh = new BMLH();
-    this.bmact = new BMAct();
-    this.bmagg = new BMAgg(2, 3);
+    this.bmact = new BMAct(5);
+    this.bmagg = new BMAgg(2, 5);
 
     this.updateActives = this.updateActives.bind(this);
     this.updateAggregations = this.updateAggregations.bind(this);
@@ -103,7 +103,9 @@ class App extends React.Component {
     // add local start time
     msg.localStart = moment().unix();
 
-    if (this.bmact.addSessionStart(msg)) {
+    const endResults = this.bmact.addSessionStart(msg)
+    if (endResults) {
+      log('Session end results', endResults);
       this.updateActives();
     }
   }
@@ -114,7 +116,9 @@ class App extends React.Component {
     // add local stop time
     msg.localStop = moment().unix();
 
-    if (this.bmact.addSessionStop(msg)) {
+    const endResult = this.bmact.addSessionStop(msg)
+    if (endResult) {
+      log('Session end result', endResult);
       this.updateActives();
     }
 

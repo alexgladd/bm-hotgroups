@@ -1,11 +1,19 @@
 // Brandmeister currently active tracker
 
 import _ from 'lodash';
+import moment from 'moment';
 import log from './logger';
-import { getTalkGroupLabel, getCallsignLabel, isSessionStart, isSessionEnd } from './session';
+import {
+  getTalkGroupLabel,
+  getCallsignLabel,
+  isSessionStart,
+  isSessionEnd,
+  isSessionTooOld
+} from './session';
 
 export default class BrandmeisterActives {
-  constructor() {
+  constructor(maxWindowMins=10) {
+    this.maxWindowSeconds = maxWindowMins * 60;
     this.reset();
   }
 
@@ -25,16 +33,19 @@ export default class BrandmeisterActives {
     if (!isSessionStart(session)) {
       log('[BMACT] Skipping session (not start)');
       return false;
+    } else if (isSessionTooOld(session, this.maxWindowSeconds)) {
+      log('[BMACT] Skipping session (too old)');
+      return false;
     } else if (_.has(this.sessions, session.SessionID)) {
       log('[BMACT] Skipping session (duplicate ID)');
       return false;
     } else {
-      this._addActiveSession(session);
+      const endResults = this._addActiveSession(session);
       this._updateActives();
       log(`[BMACT] Active sessions (${this.aSessions.length})`, this.aSessions);
       log(`[BMACT] Active TGs (${this.talkgroups.length})`, this.talkgroups);
       log(`[BMACT] Active Callsigns (${this.callsigns.length})`, this.callsigns);
-      return true;
+      return endResults;
     }
   }
 
@@ -46,12 +57,12 @@ export default class BrandmeisterActives {
       log('[BMACT] Skipping session (unknown ID)');
       return false;
     } else {
-      this.sessions = _.omit(this.sessions, [session.SessionID]);
+      const endResult = this._endSession(session);
       this._updateActives();
       log('[BMACT] Active sessions', this.sessions);
       log('[BMACT] Active TGs', this.talkgroups);
       log('[BMACT] Active Callsigns', this.callsigns);
-      return true;
+      return endResult;
     }
   }
 
@@ -65,13 +76,15 @@ export default class BrandmeisterActives {
     const invalids = _.filter(_.values(this.sessions), this._createFilterFunction(session));
     log('[BMACT] Removing invalid sessions', invalids);
 
-    this.sessions = _.omit(this.sessions, _.map(invalids, this._sessionIdMapper));
+    const endResults = invalids.map((is) => this._endSession(is, session));
 
     this.sessions[session.SessionID] = _.cloneDeep(session);
+
+    return endResults;
   }
 
   _createFilterFunction(session) {
-    return (s) => ( s.DestinationID === session.DestinationID || s.SourceID === session.SourceID);
+    return (s) => (s.DestinationID === session.DestinationID || s.SourceID === session.SourceID);
   }
 
   _sessionIdMapper(session) {
@@ -86,6 +99,25 @@ export default class BrandmeisterActives {
     this.callsigns = _.map(actSessions, this._callsignMapper);
   }
 
+  _endSession(session, stoppedBy=null) {
+    const sStop = stoppedBy ? stoppedBy.Start - 1 : session.Stop;
+    const sLocalStop = stoppedBy ? moment().unix() : session.localStop;
+
+    // pull out tg
+    const talkgroup = _.find(this.talkgroups, (tg) => tg.sessionId === session.SessionID);
+    talkgroup.stop = sStop;
+    talkgroup.localStop = sLocalStop;
+    // pull out callsign
+    const callsign = _.find(this.callsigns, (cs) => cs.sessionId === session.SessionID);
+    callsign.stop = sStop;
+    callsign.localStop = sLocalStop;
+
+    // clear the session
+    this.sessions = _.omit(this.sessions, [session.SessionID]);
+
+    return { talkgroup, callsign };
+  }
+
   _sessionMapper(session) {
     return {
       id: session.SessionID,
@@ -96,6 +128,7 @@ export default class BrandmeisterActives {
       callsignLabel: getCallsignLabel(session),
       talkgroup: session.DestinationName,
       talkgroupLabel: getTalkGroupLabel(session),
+      start: session.Start,
       localStart: session.localStart,
     };
   }
@@ -105,7 +138,9 @@ export default class BrandmeisterActives {
       id: session.DestinationID,
       name: session.DestinationName,
       label: getTalkGroupLabel(session),
-      localStart: session.localStart
+      start: session.Start,
+      localStart: session.localStart,
+      sessionId: session.SessionID,
     };
   }
 
@@ -115,7 +150,9 @@ export default class BrandmeisterActives {
       callsign: session.SourceCall,
       name: session.SourceName,
       label: getCallsignLabel(session),
-      localStart: session.localStart
+      start: session.Start,
+      localStart: session.localStart,
+      sessionId: session.SessionID,
     };
   }
 }

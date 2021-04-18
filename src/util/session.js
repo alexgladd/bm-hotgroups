@@ -29,6 +29,11 @@ export const isSessionEnd = (session={Event:'', Stop:0}) => {
   }
 }
 
+export const isSessionTooOld = (session={Start: 0}, maxAgeSeconds=600) => {
+  const start = moment.unix(session.Start);
+  return moment().diff(start, 'seconds') >= maxAgeSeconds;
+}
+
 export const getTalkGroupLabel = (session={DestinationID:0,DestinationName:'TalkGroup'}, long=false) => {
   if (_.isEmpty(session.DestinationName)) {
     return `${session.DestinationID}`;
@@ -60,8 +65,8 @@ export const getDurationSeconds = (session={Start:0,Stop:0}) => {
   return stop.diff(start, 'seconds');
 }
 
-export const getActiveSeconds = (obj={localStart:0}, now=moment()) => {
-  const start = moment.unix(obj.localStart);
+export const getActiveSeconds = (obj={start:0}, now=moment()) => {
+  const start = moment.unix(obj.start);
 
   return now.diff(start, 'seconds');
 }

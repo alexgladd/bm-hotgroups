@@ -6,7 +6,7 @@ import log from './logger';
 import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds, isSessionEnd } from './session';
 
 export default class BrandmeisterAggregator {
-  constructor(windowMins=10, maxWindowMins=30) {
+  constructor(windowMins=5, maxWindowMins=10) {
     this.window = windowMins;
     this.maxWindow = maxWindowMins;
     this.sessions = {};
