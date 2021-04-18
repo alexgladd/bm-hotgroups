@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import log from './logger';
-import { getTalkGroupLabel, getCallsignLabel } from './session';
+import { getTalkGroupLabel, getCallsignLabel, isSessionStart, isSessionEnd } from './session';
 
 export default class BrandmeisterActives {
   constructor() {
@@ -22,7 +22,7 @@ export default class BrandmeisterActives {
   }
 
   addSessionStart(session) {
-    if (session.Event !== 'Session-Start') {
+    if (!isSessionStart(session)) {
       log('[BMACT] Skipping session (not start)');
       return false;
     } else if (_.has(this.sessions, session.SessionID)) {
@@ -31,16 +31,16 @@ export default class BrandmeisterActives {
     } else {
       this._addActiveSession(session);
       this._updateActives();
-      log('[BMACT] Active sessions', this.aSessions);
-      log('[BMACT] Active TGs', this.talkgroups);
-      log('[BMACT] Active Callsigns', this.callsigns);
+      log(`[BMACT] Active sessions (${this.aSessions.length})`, this.aSessions);
+      log(`[BMACT] Active TGs (${this.talkgroups.length})`, this.talkgroups);
+      log(`[BMACT] Active Callsigns (${this.callsigns.length})`, this.callsigns);
       return true;
     }
   }
 
   addSessionStop(session) {
-    if (session.Event !== 'Session-Stop') {
-      log('[BMACT] Skipping session (not stop)');
+    if (!isSessionEnd(session)) {
+      log('[BMACT] Skipping session (not end)');
       return false;
     } else if (!_.has(this.sessions, session.SessionID)) {
       log('[BMACT] Skipping session (unknown ID)');

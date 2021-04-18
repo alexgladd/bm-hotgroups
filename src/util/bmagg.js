@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import log from './logger';
-import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds } from './session';
+import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds, isSessionEnd } from './session';
 
 export default class BrandmeisterAggregator {
   constructor(windowMins=10, maxWindowMins=30) {
@@ -28,8 +28,8 @@ export default class BrandmeisterAggregator {
   }
 
   addSession(session) {
-    if (session.Event !== 'Session-Stop') {
-      log('[BMAGG] Skipping session (not stop)');
+    if (!isSessionEnd(session)) {
+      log('[BMAGG] Skipping session (not end)');
       return false;
     } else if (_.has(this.sessions, session.SessionID)) {
       log('[BMAGG] Skipping session (duplicate ID)');

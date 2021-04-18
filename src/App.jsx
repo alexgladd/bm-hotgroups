@@ -6,12 +6,12 @@ import BMAgg from './util/bmagg';
 import BMAct from './util/bmactive';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import CurrentlyActive from './components/CurrentlyActive';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
 import log from './util/logger';
-import { getDurationSeconds } from './util/session';
+import { startSessionFilter, endSessionFilter } from './util/session';
 import './App.css';
-import CurrentlyActive from './components/CurrentlyActive';
 
 class App extends React.Component {
   constructor(props) {
@@ -42,8 +42,8 @@ class App extends React.Component {
   }
 
   updateActives() {
-    log('Active TGs', this.bmact.activeTalkgroups);
-    log('Active Callsigns', this.bmact.activeCallsigns);
+    // log('Active TGs', this.bmact.activeTalkgroups);
+    // log('Active Callsigns', this.bmact.activeCallsigns);
 
     this.setState({
       activeSessions: this.bmact.activeSessions,
@@ -53,8 +53,8 @@ class App extends React.Component {
   }
 
   updateAggregations() {
-    log('Top TGs', this.bmagg.topTalkGroups);
-    log('Top Callsigns', this.bmagg.topCallsigns);
+    // log('Top TGs', this.bmagg.topTalkGroups);
+    // log('Top Callsigns', this.bmagg.topCallsigns);
 
     this.setState({
       topGroups: this.bmagg.topTalkGroups,
@@ -109,7 +109,7 @@ class App extends React.Component {
   }
 
   handleStopMsg(msg) {
-    log('Session stop received', msg);
+    log('Session end received', msg);
 
     // add local stop time
     msg.localStop = moment().unix();
@@ -123,6 +123,10 @@ class App extends React.Component {
     }
   }
 
+  // handleDebugMsg(msg) {
+  //   log('Message received', msg);
+  // }
+
   handleAggregatorPrune() {
     if (this.bmagg.prune()) {
       this.updateAggregations();
@@ -130,21 +134,21 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const startMsgFilter = (msg) => {
-      return msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Start';
-    };
+    // const startMsgFilter = (msg) => {
+    //   return msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Start';
+    // };
 
-    const stopMsgFilter = (msg) => {
-      if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
-        return getDurationSeconds(msg) > 0;
-      } else {
-        return false;
-      }
-    };
+    // const stopMsgFilter = (msg) => {
+    //   if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
+    //     return getDurationSeconds(msg) > 0;
+    //   } else {
+    //     return false;
+    //   }
+    // };
 
     this.bmlh.onConnectionChange(this.handleConnectionChange);
-    this.bmlh.onMqtt(this.handleStartMsg, true, startMsgFilter);
-    this.bmlh.onMqtt(this.handleStopMsg, false, stopMsgFilter);
+    this.bmlh.onMqtt(this.handleStartMsg, true, startSessionFilter);
+    this.bmlh.onMqtt(this.handleStopMsg, false, endSessionFilter);
 
     if (process.env.NODE_ENV === 'production') {
       // only use analytics in prod

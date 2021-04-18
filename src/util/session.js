@@ -3,6 +3,32 @@
 import _ from 'lodash';
 import moment from 'moment';
 
+export const startSessionFilter = (session={DestinationID: 0, SessionType: 0, Event: ''}) => {
+  return isConsumableSession(session) && session.Event === 'Session-Start';
+}
+
+export const endSessionFilter = (session={DestinationID: 0, SessionType: 0, Event: '', Start: 0, Stop: 0}) => {
+  return isConsumableSession(session) && isSessionEnd(session) && getDurationSeconds(session) > 0;
+}
+
+export const isConsumableSession = (session={DestinationID: 0, SessionType: 0}) => {
+  return session.DestinationID >= 90 && session.SessionType === 7;
+}
+
+export const isSessionStart = (session={Event:''}) => {
+  return session.Event === 'Session-Start';
+}
+
+export const isSessionEnd = (session={Event:'', Stop:0}) => {
+  if (session.Event === 'Session-Stop') {
+    return true;
+  } else if (session.Event === 'Session-Update' && session.Stop > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export const getTalkGroupLabel = (session={DestinationID:0,DestinationName:'TalkGroup'}, long=false) => {
   if (_.isEmpty(session.DestinationName)) {
     return `${session.DestinationID}`;
