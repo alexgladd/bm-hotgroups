@@ -65,6 +65,7 @@ export default class BrandmeisterActives {
     } else {
       const endResult = this._endSession(session);
       log(`[BMACT] Ending session ${session.SessionID} TG ${session.DestinationName} after ${endResult.duration} seconds`);
+      // log('[BMACT] Ended session', endResult);
       this._updateActives();
       // log('[BMACT] Active sessions', this.sessions);
       // log('[BMACT] Active TGs', this.talkgroups);
