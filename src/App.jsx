@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import CurrentlyActive from './components/CurrentlyActive';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
-import log from './util/logger';
 import { startSessionFilter, endSessionFilter } from './util/session';
 import './App.css';
 
@@ -42,9 +41,6 @@ class App extends React.Component {
   }
 
   updateActives() {
-    // log('Active TGs', this.bmact.activeTalkgroups);
-    // log('Active Callsigns', this.bmact.activeCallsigns);
-
     this.setState({
       activeSessions: this.bmact.activeSessions,
       activeGroups: this.bmact.activeTalkgroups,
@@ -53,9 +49,6 @@ class App extends React.Component {
   }
 
   updateAggregations() {
-    // log('Top TGs', this.bmagg.topTalkGroups);
-    // log('Top Callsigns', this.bmagg.topCallsigns);
-
     this.setState({
       topGroups: this.bmagg.topTalkGroups,
       topCallsigns: this.bmagg.topCallsigns,
@@ -98,14 +91,11 @@ class App extends React.Component {
   }
 
   handleStartMsg(msg) {
-    // log('Session start received', msg);
-
     // add local start time
     msg.localStart = moment().unix();
 
     const endResults = this.bmact.addSessionStart(msg)
     if (endResults) {
-      // log('Session end results', endResults);
       this.updateActives();
 
       if (this.bmagg.addEndedSessions(endResults)) {
@@ -115,14 +105,11 @@ class App extends React.Component {
   }
 
   handleStopMsg(msg) {
-    // log('Session end received', msg);
-
     // add local stop time
     msg.localStop = moment().unix();
 
     const endResult = this.bmact.addSessionStop(msg)
     if (endResult) {
-      // log('Session end result', endResult);
       this.updateActives();
 
       if (this.bmagg.addEndedSessions([endResult])) {
@@ -130,10 +117,6 @@ class App extends React.Component {
       }
     }
   }
-
-  // handleDebugMsg(msg) {
-  //   log('Message received', msg);
-  // }
 
   handleAggregatorPrune() {
     if (this.bmagg.prune()) {

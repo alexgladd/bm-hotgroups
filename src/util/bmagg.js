@@ -3,7 +3,6 @@
 import _ from 'lodash';
 import moment from 'moment';
 import log from './logger';
-import { getTalkGroupLabel, getCallsignLabel, getDurationSeconds, isSessionEnd } from './session';
 
 export default class BrandmeisterAggregator {
   constructor(windowMins=5, maxWindowMins=10) {
