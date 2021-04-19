@@ -98,32 +98,36 @@ class App extends React.Component {
   }
 
   handleStartMsg(msg) {
-    log('Session start received', msg);
+    // log('Session start received', msg);
 
     // add local start time
     msg.localStart = moment().unix();
 
     const endResults = this.bmact.addSessionStart(msg)
     if (endResults) {
-      log('Session end results', endResults);
+      // log('Session end results', endResults);
       this.updateActives();
+
+      if (this.bmagg.addEndedSessions(endResults)) {
+        this.updateAggregations();
+      }
     }
   }
 
   handleStopMsg(msg) {
-    log('Session end received', msg);
+    // log('Session end received', msg);
 
     // add local stop time
     msg.localStop = moment().unix();
 
     const endResult = this.bmact.addSessionStop(msg)
     if (endResult) {
-      log('Session end result', endResult);
+      // log('Session end result', endResult);
       this.updateActives();
-    }
 
-    if (this.bmagg.addSession(msg)) {
-      this.updateAggregations();
+      if (this.bmagg.addEndedSessions([endResult])) {
+        this.updateAggregations();
+      }
     }
   }
 
@@ -138,18 +142,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // const startMsgFilter = (msg) => {
-    //   return msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Start';
-    // };
-
-    // const stopMsgFilter = (msg) => {
-    //   if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
-    //     return getDurationSeconds(msg) > 0;
-    //   } else {
-    //     return false;
-    //   }
-    // };
-
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleStartMsg, true, startSessionFilter);
     this.bmlh.onMqtt(this.handleStopMsg, false, endSessionFilter);

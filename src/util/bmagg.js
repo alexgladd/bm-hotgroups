@@ -27,25 +27,57 @@ export default class BrandmeisterAggregator {
     return this.windowedSessions;
   }
 
-  addSession(session) {
-    if (!isSessionEnd(session)) {
-      log('[BMAGG] Skipping session (not end)');
-      return false;
-    } else if (_.has(this.sessions, session.SessionID)) {
-      log('[BMAGG] Skipping session (duplicate ID)');
+  // addSession(session) {
+  //   if (!isSessionEnd(session)) {
+  //     log('[BMAGG] Skipping session (not end)');
+  //     return false;
+  //   } else if (_.has(this.sessions, session.SessionID)) {
+  //     log('[BMAGG] Skipping session (duplicate ID)');
+  //     return false;
+  //   }
+
+  //   this.sessions[session.SessionID] = _.cloneDeep(session);
+
+  //   // call duration
+  //   this.sessions[session.SessionID].duration = getDurationSeconds(session);
+
+  //   if (this._windowFilter(moment(), session)) {
+  //     this.windowedSessions.push(this.sessions[session.SessionID]);
+  //     this.windowedSessions = _.orderBy(this.windowedSessions, ['localStop'], ['desc']);
+
+  //     log('[BMAGG] Windowed sessions', this.windowedSessions);
+  //     this.reaggregate();
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  addEndedSessions(sessions=[]) {
+    if (sessions.length < 1) {
+      log('[BMAGG] Skipping sessions (empty)');
       return false;
     }
 
-    this.sessions[session.SessionID] = _.cloneDeep(session);
+    let updatedAgg = false;
 
-    // call duration
-    this.sessions[session.SessionID].duration = getDurationSeconds(session);
+    for (const session of sessions) {
+      if (_.has(this.sessions, session.id)) {
+        log('[BMAGG] Skipping session (duplicate ID)');
+        continue;
+      }
 
-    if (this._windowFilter(moment(), session)) {
-      this.windowedSessions.push(this.sessions[session.SessionID]);
+      this.sessions[session.id] = session;
+
+      if (this._windowFilter(moment(), session)) {
+        updatedAgg = true;
+        this.windowedSessions.push(this.sessions[session.id]);
+      }
+    }
+
+    if (updatedAgg) {
       this.windowedSessions = _.orderBy(this.windowedSessions, ['localStop'], ['desc']);
-
-      log('[BMAGG] Windowed sessions', this.windowedSessions);
+      // log('[BMAGG] Windowed sessions', this.windowedSessions);
       this.reaggregate();
       return true;
     } else {
@@ -107,15 +139,13 @@ export default class BrandmeisterAggregator {
 
   _talkGroupReducer(acc, session) {
     let tg;
-    if (_.has(acc, session.DestinationID)) {
+    if (_.has(acc, session.talkgroup.id)) {
       // update existing
-      tg = acc[session.DestinationID];
+      tg = acc[session.talkgroup.id];
     } else {
       // create new
       tg = {
-        id: session.DestinationID,
-        name: session.DestinationName,
-        label: getTalkGroupLabel(session, true),
+        ...session.talkgroup,
         talkTime: 0,
         lastActive: 0
       };
@@ -130,16 +160,13 @@ export default class BrandmeisterAggregator {
 
   _callsignReducer(acc, session) {
     let cs;
-    if (_.has(acc, session.SourceID)) {
+    if (_.has(acc, session.callsign.id)) {
       // update existing
-      cs = acc[session.SourceID];
+      cs = acc[session.callsign.id];
     } else {
       // create new
       cs = {
-        id: session.SourceID,
-        callsign: session.SourceCall,
-        label: getCallsignLabel(session, true),
-        name: session.SourceName,
+        ...session.callsign,
         talkTime: 0,
         lastActive: 0
       };
