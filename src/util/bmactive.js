@@ -82,7 +82,7 @@ export default class BrandmeisterActives {
   _addActiveSession(session) {
     // scan and prune any active sessions that this one invalidates
     const invalids = _.filter(_.values(this.sessions), this._createFilterFunction(session));
-    log('[BMACT] Removing invalid sessions', invalids);
+    if (invalids.length > 0) log('[BMACT] Removing invalid sessions', invalids);
 
     const endResults = invalids.map((is) => this._endSession(is, session));
 

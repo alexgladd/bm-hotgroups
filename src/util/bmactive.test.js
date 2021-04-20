@@ -24,11 +24,11 @@ const getSession = (event, id='abcd', start=0, stop=0, from=3333333, to=1111111)
 const getSessionStart = (id='abcd', startOffset=30, from=3333333, to=1111111, now=moment()) =>
   getSession('Session-Start', id, now.unix() - startOffset, 0, from, to);
 
-const getSessionUpdate = (id='abcd', startOffset=30, duration=60, from=3333333, to=1111111, now=moment()) =>
-  getSession('Session-Update', id, now.unix() - startOffset, now.unix() - (startOffset + duration), from, to);
+const getSessionUpdate = (id='abcd', startOffset=30, duration=20, from=3333333, to=1111111, now=moment()) =>
+  getSession('Session-Update', id, now.unix() - startOffset, now.unix() - startOffset + duration, from, to);
 
-const getSessionStop = (id='abcd', startOffset=30, duration=60, from=3333333, to=1111111, now=moment()) =>
-  getSession('Session-Stop', id, now.unix() - startOffset, now.unix() - (startOffset + duration), from, to);
+const getSessionStop = (id='abcd', startOffset=30, duration=20, from=3333333, to=1111111, now=moment()) =>
+  getSession('Session-Stop', id, now.unix() - startOffset, now.unix() - startOffset + duration, from, to);
 
 beforeEach(() => {
   active = new bmactive(2);
@@ -89,4 +89,29 @@ it('accepts multiple independent start sessions', () => {
   expect(active.activeSessions.length).toEqual(2);
 });
 
-// TODO: session stop and update tests
+it('rejects non-end sessions', () => {
+  const s1 = getSessionStart();
+  const s2 = getSessionUpdate('abcd', 10, 5);
+  s2.Stop = 0;
+  s2.localStop = undefined;
+  expect(active.addSessionStop(s1)).toEqual(false);
+  expect(active.addSessionStop(s2)).toEqual(false);
+});
+
+it('rejects end sessions with unknown session IDs', () => {
+  const s1 = getSessionStart('abcd');
+  const s2 = getSessionUpdate('efgh');
+  const s3 = getSessionStop('efgh');
+  active.addSessionStart(s1);
+  expect(active.addSessionStop(s2)).toEqual(false);
+  expect(active.addSessionStop(s3)).toEqual(false);
+});
+
+it('accepts end sessions for known session IDs', () => {
+  const s1 = getSessionStart('abcd', 30);
+  const s2 = getSessionUpdate('abcd', 30, 10);
+  active.addSessionStart(s1);
+  const result = active.addSessionStop(s2);
+  expect(result.id).toEqual('session-0123-abcd');
+  expect(result.duration).toEqual(10);
+});
