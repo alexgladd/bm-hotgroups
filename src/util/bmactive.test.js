@@ -114,4 +114,5 @@ it('accepts end sessions for known session IDs', () => {
   const result = active.addSessionStop(s2);
   expect(result.id).toEqual('session-0123-abcd');
   expect(result.duration).toEqual(10);
+  expect(active.activeSessions.length).toEqual(0);
 });
