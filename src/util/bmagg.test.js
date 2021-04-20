@@ -49,6 +49,11 @@ beforeEach(() => {
   agg = new bmagg(1, 2);
 });
 
+it('rejects empty session results', () => {
+  expect(agg.addEndedSessions([])).toEqual(false);
+  expect(agg.latestActivity).toHaveLength(0);
+});
+
 it('accepts session result in the window', () => {
   const s = getSessionResults();
   expect(agg.addEndedSessions([s])).toEqual(true);

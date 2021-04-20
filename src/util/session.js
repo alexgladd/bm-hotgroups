@@ -31,7 +31,7 @@ export const isSessionEnd = (session={Event:'', Stop:0}) => {
 
 export const isSessionTooOld = (session={Start: 0}, maxAgeSeconds=600) => {
   const start = moment.unix(session.Start);
-  return moment().diff(start, 'seconds') >= maxAgeSeconds;
+  return moment().diff(start, 'seconds') > maxAgeSeconds;
 }
 
 export const getTalkGroupLabel = (session={DestinationID:0,DestinationName:'TalkGroup'}, long=false) => {
