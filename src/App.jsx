@@ -24,12 +24,14 @@ class App extends React.Component {
       topGroups: [],
       activeCallsigns: [],
       topCallsigns: [],
-      latestSessions: []
+      latestSessions: [],
+      aggregationWindowMins: 5,
+      maxAggregationWindowMins: 10,
     };
 
     this.bmlh = new BMLH();
-    this.bmact = new BMAct(5);
-    this.bmagg = new BMAgg(2, 5);
+    this.bmact = new BMAct(this.state.aggregationWindowMins);
+    this.bmagg = new BMAgg(this.state.aggregationWindowMins, this.state.maxAggregationWindowMins);
 
     this.updateActives = this.updateActives.bind(this);
     this.updateAggregations = this.updateAggregations.bind(this);
@@ -38,6 +40,7 @@ class App extends React.Component {
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
     this.handleAggregatorPrune = this.handleAggregatorPrune.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   updateActives() {
@@ -124,6 +127,17 @@ class App extends React.Component {
     }
   }
 
+  handleReset() {
+    if (process.env.NODE_ENV === 'production') {
+      ReactGA.event({ category: 'Aggregation', action: 'Clear' });
+    }
+
+    this.bmact.reset();
+    this.updateActives();
+    this.bmagg.reset();
+    this.updateAggregations();
+  }
+
   componentDidMount() {
     this.bmlh.onConnectionChange(this.handleConnectionChange);
     this.bmlh.onMqtt(this.handleStartMsg, true, startSessionFilter);
@@ -151,7 +165,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { startup, bmConnected, activeSessions, topGroups, topCallsigns } = this.state;
+    const {
+      startup,
+      bmConnected,
+      activeSessions,
+      topGroups,
+      topCallsigns,
+      aggregationWindowMins, } = this.state;
 
     return (
       <React.Fragment>
@@ -161,6 +181,11 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
+          <div id="Aggregation">
+            <span className="Window Subtext">Aggregating over {aggregationWindowMins} mintues</span>
+            { /* eslint-disable-next-line */ }
+            <a href="#" onClick={this.handleReset}>Clear</a>
+          </div>
           <CurrentlyActive sessions={activeSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />

@@ -9,11 +9,20 @@ Theme: http://colormind.io/bootstrap/
   box-sizing: border-box;
 }
 
+a, a:visited {
+  color: #dd4b3988;
+  text-decoration: none;
+}
+a:focus, a:hover {
+  color: #dd4b39;
+}
+
 #App {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto auto;
   grid-template-areas:
+    "aggregation"
     "actives"
     "top-groups"
     "top-calls";
@@ -21,6 +30,19 @@ Theme: http://colormind.io/bootstrap/
   margin-top: 6rem;
   margin-bottom: 3rem;
   padding: 0 12px;
+}
+
+#Aggregation {
+  grid-area: aggregation;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: baseline;
+  padding-top: 12px;
+  font-style: italic;
+}
+#Aggregation .Window {
+  margin-right: 24px;
 }
 
 .Button {
@@ -79,6 +101,10 @@ Theme: http://colormind.io/bootstrap/
   #App {
     margin-top: 4rem;
   }
+
+  #Aggregation {
+    justify-content: flex-end;
+  }
 }
 
 @media screen and (min-width: 1440px) {
@@ -86,6 +112,7 @@ Theme: http://colormind.io/bootstrap/
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
     grid-template-areas:
+      "aggregation aggregation"
       "actives actives"
       "top-groups top-calls";
     /* grid-template-areas:

@@ -8,10 +8,7 @@ export default class BrandmeisterAggregator {
   constructor(windowMins=5, maxWindowMins=10) {
     this.window = windowMins;
     this.maxWindow = maxWindowMins;
-    this.sessions = {};
-    this.windowedSessions = [];
-    this.talkGroups = [];
-    this.callsigns = [];
+    this.reset();
   }
 
   get topTalkGroups() {
@@ -25,32 +22,6 @@ export default class BrandmeisterAggregator {
   get latestActivity() {
     return this.windowedSessions;
   }
-
-  // addSession(session) {
-  //   if (!isSessionEnd(session)) {
-  //     log('[BMAGG] Skipping session (not end)');
-  //     return false;
-  //   } else if (_.has(this.sessions, session.SessionID)) {
-  //     log('[BMAGG] Skipping session (duplicate ID)');
-  //     return false;
-  //   }
-
-  //   this.sessions[session.SessionID] = _.cloneDeep(session);
-
-  //   // call duration
-  //   this.sessions[session.SessionID].duration = getDurationSeconds(session);
-
-  //   if (this._windowFilter(moment(), session)) {
-  //     this.windowedSessions.push(this.sessions[session.SessionID]);
-  //     this.windowedSessions = _.orderBy(this.windowedSessions, ['localStop'], ['desc']);
-
-  //     log('[BMAGG] Windowed sessions', this.windowedSessions);
-  //     this.reaggregate();
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   addEndedSessions(sessions=[]) {
     if (sessions.length < 1) {
@@ -126,6 +97,13 @@ export default class BrandmeisterAggregator {
     } else {
       return false;
     }
+  }
+
+  reset() {
+    this.sessions = {};
+    this.windowedSessions = [];
+    this.talkGroups = [];
+    this.callsigns = [];
   }
 
   _windowFilter(now, session) {
