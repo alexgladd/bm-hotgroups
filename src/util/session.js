@@ -71,6 +71,20 @@ export const getActiveSeconds = (obj={start:0}, now=moment()) => {
   return now.diff(start, 'seconds');
 }
 
+export const getActiveTime = (obj={start:0}, now=moment()) => {
+  const start = moment.unix(obj.start);
+  const seconds = now.diff(start, 'seconds');
+  const minutes = now.diff(start, 'minutes');
+
+  if (minutes > 1) {
+    return `${minutes}mins ${seconds % 60}s`;
+  } else if (minutes > 0) {
+    return `${minutes}min ${seconds % 60}s`;
+  } else {
+    return `${seconds}s`;
+  }
+}
+
 export const formatTime = (unixTime=0, format='ddd h:mm:ss a') => {
   return moment.unix(unixTime).format(format);
 }
