@@ -45,13 +45,6 @@ export default function CurrentlyActive({ sessions }) {
           </tbody>
         </table>
       </div>
-      {/* <div className="ActiveItems">
-        { aSessions.map((s) => (
-          <div key={s.id}>
-            {s.callsignLabel} &rArr; {s.talkgroupLabel} {`(${s.activeSeconds}s)`}
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }

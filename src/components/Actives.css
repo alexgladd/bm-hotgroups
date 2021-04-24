@@ -24,9 +24,6 @@
   border-radius: 8px;
   background-color: #dd4b3988;
 }
-/* .ActiveItems div {
-  margin: 4px 8px;
-} */
 
 #ActiveGroups {
   grid-area: groups;
