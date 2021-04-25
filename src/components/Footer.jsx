@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTag, faComments } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import './Footer.css';
+import pkg from '../../package.json';
 
 export default function Footer(props) {
   return (
     <footer id="Footer">
       <div className="Version">
-        <FontAwesomeIcon icon={faTag} /> { process.env.REACT_APP_VERSION }
+        <FontAwesomeIcon icon={faTag} /> { pkg.version }
       </div>
 
       <div className="Source">

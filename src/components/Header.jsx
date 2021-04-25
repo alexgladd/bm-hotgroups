@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBroadcastTower } from '@fortawesome/free-solid-svg-icons'
+import { faBroadcastTower, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './Header.css';
 
 const propTypes = {
@@ -26,19 +26,26 @@ export default class Header extends React.Component {
           <FontAwesomeIcon icon={faBroadcastTower} />&nbsp;&nbsp;Brandmeister Top Activity
         </h1>
 
-        <div className="ConnectBtn">
-        { enabled ?
-          <button className="Button Primary" onClick={onConnectionClick}>
-            { connected ? 'Disconnect' : 'Connect' }
-          </button> :
-          'Connecting...'
-        }
-        </div>
+        <div id="Controls">
+          <div className="ConnectBtn">
+          { enabled ?
+            <button className="Button Primary" onClick={onConnectionClick}>
+              { connected ? 'Disconnect' : 'Connect' }
+            </button> :
+            'Connecting...'
+          }
+          </div>
 
-        { connected ?
-          <div className="Label Success">connected</div> :
-          <div className="Label Danger">disconnected</div>
-        }
+          { connected ?
+            <div className="Status On" title="Connected to Brandmeister">
+              <FontAwesomeIcon fixedWidth icon={faCheckCircle} />
+            </div>
+            :
+            <div className="Status Off" title="Disconnected from Brandmeister">
+              <FontAwesomeIcon fixedWidth icon={faTimesCircle} />
+            </div>
+          }
+        </div>
       </header>
     );
   }
