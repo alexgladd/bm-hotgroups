@@ -4,25 +4,6 @@ import moment from 'moment';
 
 let agg = new bmagg(1, 2);
 
-// const getSession = (id='abcd', stopOffset=30, duration=60, now=moment()) => {
-//   return { 
-//     DestinationCall: "D1CALL",
-//     DestinationID: 1111111,
-//     DestinationName: "DNAME",
-//     Event: "Session-Stop",
-//     LinkCall: "L1CALL",
-//     LinkName: "LNAME",
-//     SessionID: `session-0123-${id}`,
-//     SessionType: 7,
-//     SourceCall: "S1CALL",
-//     SourceID: 3333333,
-//     SourceName: "SNAME",
-//     Start: now.unix() - (stopOffset + duration),
-//     Stop: now.unix() - stopOffset,
-//     localStop: now.unix() - stopOffset
-//   };
-// }
-
 const getSessionResults = (id='abcd', stopOffset=30, duration=60, from=3333333, to=100, now=moment()) => ({
   id: `session-1234-${id}`,
   start: now.unix() - (stopOffset + duration),
@@ -125,4 +106,17 @@ it('updates callsign aggregations correctly', () => {
   expect(agg.topCallsigns).toHaveLength(1);
   expect(agg.topCallsigns[0].talkTime).toEqual(15);
   expect(agg.topCallsigns[0].lastActive).toEqual(now.unix() - 10);
+});
+
+it('should clear all aggregations on reset', () => {
+  const s1 = getSessionResults('abcd', 30, 5, 111, 222);
+  const s2 = getSessionResults('efgh', 20, 5, 333, 444);
+  const s3 = getSessionResults('ijkl', 10, 5, 555, 666);
+  agg.addEndedSessions([s1, s2, s3]);
+  expect(agg.topCallsigns.length).toEqual(3);
+  expect(agg.topTalkGroups.length).toEqual(3);
+
+  agg.reset();
+  expect(agg.topCallsigns.length).toEqual(0);
+  expect(agg.topTalkGroups.length).toEqual(0);
 });

@@ -116,3 +116,16 @@ it('accepts end sessions for known session IDs', () => {
   expect(result.duration).toEqual(10);
   expect(active.activeSessions.length).toEqual(0);
 });
+
+it('should clear all active sessions on reset', () => {
+  const s1 = getSessionStart('abcd', 30, 111, 222);
+  const s2 = getSessionStart('efgh', 20, 333, 444);
+  const s3 = getSessionStart('ijkl', 10, 555, 666);
+  active.addSessionStart(s1);
+  active.addSessionStart(s2);
+  active.addSessionStart(s3);
+  expect(active.activeSessions.length).toEqual(3);
+
+  active.reset();
+  expect(active.activeSessions.length).toEqual(0);
+});
