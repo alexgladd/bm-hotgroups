@@ -4,22 +4,69 @@ Header styles
 
 #Header {
   display: flex;
+  flex-flow: row wrap;
   align-items: center;
   position: fixed;
   top: 0;
   width: 100vw;
+  height: 6rem;
   color: #f6f1f2;
   background-color: #dd4b39;
   padding: 0.5rem 12px;
   z-index: 100;
 }
 
-#Header h1 {
+#Header > h1 {
   flex: 1 1 auto;
-  font-size: 26px;
+  font-size: 1.25rem;
   margin: 0;
+  text-align: center;
 }
 
 #Header .ConnectBtn {
   margin-right: 24px;
+}
+
+#Header .Status {
+  display: inline-block;
+  color: #ffffff;
+  background-color: hsl(0, 0%, 60%);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  text-align: center;
+  font-size: 24px;
+}
+
+#Header .Status.On {
+  background-color: hsl(81, 33%, 43%);
+}
+
+#Header .Status.Off {
+  background-color: hsl(4, 90%, 58%);
+}
+
+#Controls {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  #Header {
+    height: 4rem;
+  }
+
+  #Header > h1 {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  #Controls {
+    flex: unset;
+    margin-top: unset;
+    justify-content: flex-end;
+  }
 }

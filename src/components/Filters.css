@@ -4,6 +4,7 @@ Common filters styles
 
 .Filters {
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   margin: 0 auto;
 }

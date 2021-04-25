@@ -86,7 +86,7 @@ export default class TopCallsigns extends React.Component {
 
     let topCallsigns = filteredCallsigns.map((cs, idx) => (
       <tr key={idx}>
-        <td>{ cs.label }</td>
+        <td>{ cs.callsign } <span className="Subtext">({ cs.id })</span></td>
         <td>{ cs.name }</td>
         <td>{ `${cs.talkTime} seconds` }</td>
         <td>{ formatTime(cs.lastActive) }</td>

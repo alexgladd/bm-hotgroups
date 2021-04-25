@@ -1,0 +1,52 @@
+/* Actives styles */
+
+.Actives h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.ActiveItems {
+  height: 20vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #dd4b3988 #89869522;
+}
+.ActiveItems table {
+  margin-top: 0;
+}
+.ActiveItems::-webkit-scrollbar {
+  width: 8px;
+}
+.ActiveItems::-webkit-scrollbar-track {
+  background-color: #89869522;
+}
+.ActiveItems::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #dd4b3988;
+}
+
+#ActiveGroups {
+  grid-area: groups;
+}
+
+#ActiveCallsigns {
+  grid-area: calls;
+}
+
+#CurrentlyActive {
+  grid-area: actives;
+}
+
+@media screen and (min-width: 768px) {
+  .ActiveItems {
+    height: 25vh;
+  }
+}
+
+@media screen and (min-width: 792px) {
+  #CurrentlyActive {
+    width: 768px;
+    margin: 0 auto;
+  }
+}

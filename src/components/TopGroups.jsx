@@ -63,7 +63,7 @@ export default class TopGroups extends React.Component {
 
     let topGroups = filteredGroups.map((tg, idx) => (
       <tr key={idx}>
-        <td>{ tg.label }</td>
+        <td>{ tg.name } <span className="Subtext">({ tg.id })</span></td>
         <td>{ `${tg.talkTime} seconds` }</td>
         <td>{ formatTime(tg.lastActive) }</td>
       </tr>

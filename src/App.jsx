@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactGA from 'react-ga';
+import moment from 'moment';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
+import BMAct from './util/bmactive';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import CurrentlyActive from './components/CurrentlyActive';
 import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
-import LatestActivity from './components/LatestActivity';
-import log from './util/logger';
-import { getDurationSeconds } from './util/session';
+import { startSessionFilter, endSessionFilter } from './util/session';
 import './App.css';
 
 class App extends React.Component {
@@ -18,25 +19,39 @@ class App extends React.Component {
     this.state = {
       startup: true,
       bmConnected: false,
+      activeSessions: [],
+      activeGroups: [],
       topGroups: [],
+      activeCallsigns: [],
       topCallsigns: [],
-      latestSessions: []
+      latestSessions: [],
+      aggregationWindowMins: 5,
+      maxAggregationWindowMins: 10,
     };
 
     this.bmlh = new BMLH();
-    this.bmagg = new BMAgg(2, 3);
+    this.bmact = new BMAct(this.state.aggregationWindowMins);
+    this.bmagg = new BMAgg(this.state.aggregationWindowMins, this.state.maxAggregationWindowMins);
 
+    this.updateActives = this.updateActives.bind(this);
     this.updateAggregations = this.updateAggregations.bind(this);
-    this.handleMqttMsg = this.handleMqttMsg.bind(this);
+    this.handleStartMsg = this.handleStartMsg.bind(this);
+    this.handleStopMsg = this.handleStopMsg.bind(this);
     this.handleConnectionChange = this.handleConnectionChange.bind(this);
     this.handleConnectionBtn = this.handleConnectionBtn.bind(this);
     this.handleAggregatorPrune = this.handleAggregatorPrune.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+  }
+
+  updateActives() {
+    this.setState({
+      activeSessions: this.bmact.activeSessions,
+      activeGroups: this.bmact.activeTalkgroups,
+      activeCallsigns: this.bmact.activeCallsigns,
+    });
   }
 
   updateAggregations() {
-    log('Top TGs', this.bmagg.topTalkGroups);
-    log('Top Callsigns', this.bmagg.topCallsigns);
-
     this.setState({
       topGroups: this.bmagg.topTalkGroups,
       topCallsigns: this.bmagg.topCallsigns,
@@ -62,6 +77,7 @@ class App extends React.Component {
         ReactGA.event({ category: 'BM Connection', action: 'Connect' });
       }
 
+      this.bmact.reset();
       this.bmlh.open();
       this.pruneIntervalId = setInterval(this.handleAggregatorPrune, 60000);
       this.setState({ startup: true });
@@ -77,11 +93,31 @@ class App extends React.Component {
     }
   }
 
-  handleMqttMsg(msg) {
-    log('Session stop received', msg);
+  handleStartMsg(msg) {
+    // add local start time
+    msg.localStart = moment().unix();
 
-    if (this.bmagg.addSession(msg)) {
-      this.updateAggregations();
+    const endResults = this.bmact.addSessionStart(msg)
+    if (endResults) {
+      this.updateActives();
+
+      if (this.bmagg.addEndedSessions(endResults)) {
+        this.updateAggregations();
+      }
+    }
+  }
+
+  handleStopMsg(msg) {
+    // add local stop time
+    msg.localStop = moment().unix();
+
+    const endResult = this.bmact.addSessionStop(msg)
+    if (endResult) {
+      this.updateActives();
+
+      if (this.bmagg.addEndedSessions([endResult])) {
+        this.updateAggregations();
+      }
     }
   }
 
@@ -91,17 +127,21 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const msgFilter = (msg) => {
-      if (msg.DestinationID > 90 && msg.SessionType === 7 && msg.Event === 'Session-Stop') {
-        return getDurationSeconds(msg) > 0;
-      } else {
-        return false;
-      }
-    };
+  handleReset() {
+    if (process.env.NODE_ENV === 'production') {
+      ReactGA.event({ category: 'Aggregation', action: 'Clear' });
+    }
 
+    this.bmact.reset();
+    this.updateActives();
+    this.bmagg.reset();
+    this.updateAggregations();
+  }
+
+  componentDidMount() {
     this.bmlh.onConnectionChange(this.handleConnectionChange);
-    this.bmlh.onMqtt(this.handleMqttMsg, true, msgFilter);
+    this.bmlh.onMqtt(this.handleStartMsg, true, startSessionFilter);
+    this.bmlh.onMqtt(this.handleStopMsg, false, endSessionFilter);
 
     if (process.env.NODE_ENV === 'production') {
       // only use analytics in prod
@@ -125,7 +165,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { startup, bmConnected, topGroups, topCallsigns, latestSessions } = this.state;
+    const {
+      startup,
+      bmConnected,
+      activeSessions,
+      topGroups,
+      topCallsigns,
+      aggregationWindowMins, } = this.state;
 
     return (
       <React.Fragment>
@@ -135,7 +181,12 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
-          <LatestActivity sessions={latestSessions} />
+          <div id="Aggregation">
+            <span className="Window Subtext">Aggregating over {aggregationWindowMins} mintues</span>
+            { /* eslint-disable-next-line */ }
+            <a href="#" onClick={this.handleReset}>Clear</a>
+          </div>
+          <CurrentlyActive sessions={activeSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
         </main>

@@ -31,7 +31,7 @@ export default class LatestActivity extends React.Component {
       <tr key={idx}>
         <td>{ `${getCallsignLabel(s)} - ${s.SourceName}` }</td>
         <td>{ getTalkGroupLabel(s) }</td>
-        <td>{ formatTime(s.Stop) }</td>
+        <td>{ formatTime(s.localStop) }</td>
         <td>{ `${s.duration} seconds` }</td>
         <td>{ getLinkLabel(s) }</td>
       </tr>
