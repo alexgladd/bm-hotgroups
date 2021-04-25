@@ -182,7 +182,7 @@ class App extends React.Component {
         
         <main id="App">
           <div id="Aggregation">
-            <span className="Window Subtext">Aggregating over {aggregationWindowMins} mintues</span>
+            <span className="Window Subtext">Aggregating over {aggregationWindowMins} minutes</span>
             { /* eslint-disable-next-line */ }
             <a href="#" onClick={this.handleReset}>Clear</a>
           </div>
