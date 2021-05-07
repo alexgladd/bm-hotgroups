@@ -1,5 +1,12 @@
 /* Mobile menu button styles */
 
-.MobileMenu {
-  
+#MenuBtn {
+  border: none;
+  padding: 0;
+  background-color: #dd4b39;
+}
+
+#MenuBtn > img {
+  width: 2rem;
+  height: 1.25rem;
 }

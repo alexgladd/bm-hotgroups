@@ -9,16 +9,16 @@ Header styles
   position: fixed;
   top: 0;
   width: 100vw;
-  height: 4rem;
+  height: 3.75rem;
   color: #f6f1f2;
   background-color: #dd4b39;
-  padding: 0.5rem 12px;
+  padding: 0 1rem;
   z-index: 100;
 }
 
 #Header > h1 {
-  flex: 1 1 auto;
-  font-size: 1.25rem;
+  flex: 1 0 auto;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -26,10 +26,29 @@ Header styles
   margin-left: 0.5rem;
 }
 
+@media screen and (min-width: 375px) {
+  #Header > h1 {
+    font-size: 1.2rem;
+  }
+
+  #Header > h1 > .Title {
+    margin-left: 0.75rem;
+  }
+}
+
+@media screen and (min-width: 425px) {
+  #Header > h1 {
+    font-size: 1.3rem;
+  }
+
+  #Header > h1 > .Title {
+    margin-left: 0.75rem;
+  }
+}
+
 @media screen and (min-width: 768px) {
   #Header > h1 {
     font-size: 1.5rem;
-    text-align: left;
   }
 
   #Header > h1 > .Title {
