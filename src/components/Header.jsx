@@ -8,8 +8,18 @@ import MenuButton from './MenuButton';
 function NavMenu({ isOpen }) {
   return (
     <nav id="NavMenu" role="navigation" className={isOpen ? 'Open' : undefined}>
-      <div>About</div>
-      <div>News</div>
+      <a href="https://www.brandmeisteractivity.live/"
+        className="NavMenuItem"
+        target="_blank"
+        rel="noopener noreferrer">
+        About
+      </a>
+      <a href="https://www.brandmeisteractivity.live/#news"
+        className="NavMenuItem"
+        target="_blank"
+        rel="noopener noreferrer">
+        News
+      </a>
     </nav>
   );
 }

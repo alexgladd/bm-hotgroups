@@ -33,14 +33,33 @@ Header styles
   right: 0;
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
+  align-items: stretch;
   font-weight: 500;
   background-color: #dd4b39;
+  font-size: 1.2rem;
   visibility: hidden;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
 }
 
 #NavMenu.Open {
   visibility: visible;
+  opacity: 100;
+}
+
+#NavMenu .NavMenuItem {
+  height: 3.75rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  color: #f6f1f2;
+  transition: background-color 200ms ease-in-out;
+}
+
+#NavMenu .NavMenuItem:hover {
+  background-color: #F6F1F222;
 }
 
 @media screen and (min-width: 375px) {
@@ -61,6 +80,10 @@ Header styles
   #Header > h1 > .Title {
     margin-left: 0.75rem;
   }
+
+  #NavMenu {
+    font-size: 1.25rem;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -70,5 +93,10 @@ Header styles
 
   #Header > h1 > .Title {
     margin-left: 1rem;
+  }
+
+  #NavMenu {
+    left: unset;
+    font-size: 1.4rem;
   }
 }
