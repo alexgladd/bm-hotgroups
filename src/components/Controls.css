@@ -1,0 +1,53 @@
+/* Aggregation controls styles */
+
+#Controls {
+  grid-area: controls;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+#Controls .Window {
+  margin-right: 1rem;
+}
+
+#Controls .Connection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  color: #ffffff;
+}
+
+#Controls .ConnectBtn {
+  margin-right: 24px;
+  background-color: #dd4b39;
+  border-radius: 3px;
+}
+
+#Controls .Status {
+  display: inline-block;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+#Controls .Status.On {
+  background-color: hsl(81, 33%, 43%);
+}
+
+#Controls .Status.Off {
+  background-color: hsl(4, 90%, 58%);
+}
+
+@media screen and (min-width: 768px) {
+  #Controls {
+    flex-flow: row-reverse nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}

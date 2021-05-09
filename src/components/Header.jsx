@@ -1,54 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBroadcastTower, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import ReactGA from 'react-ga';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBroadcastTower, faInfoCircle, faNewspaper, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
+import MenuButton from './MenuButton';
 
-const propTypes = {
-  enabled: PropTypes.bool,
-  connected: PropTypes.bool,
-  onConnectionClick: PropTypes.func,
-};
-
-const defaultProps = {
-  enabled: false,
-  connected: false,
-  onConnectionClick() { return; }
-};
-
-export default class Header extends React.Component {
-  render() {
-    const { enabled, connected, onConnectionClick } = this.props;
-
-    return (
-      <header id="Header">
-        <h1>
-          <FontAwesomeIcon icon={faBroadcastTower} />&nbsp;&nbsp;Brandmeister Top Activity
-        </h1>
-
-        <div id="Controls">
-          <div className="ConnectBtn">
-          { enabled ?
-            <button className="Button Primary" onClick={onConnectionClick}>
-              { connected ? 'Disconnect' : 'Connect' }
-            </button> :
-            'Connecting...'
-          }
-          </div>
-
-          { connected ?
-            <div className="Status On" title="Connected to Brandmeister">
-              <FontAwesomeIcon fixedWidth icon={faCheckCircle} />
-            </div>
-            :
-            <div className="Status Off" title="Disconnected from Brandmeister">
-              <FontAwesomeIcon fixedWidth icon={faTimesCircle} />
-            </div>
-          }
-        </div>
-      </header>
-    );
+const logCtaEvent = (name = '') => {
+  console.log('logCtaEvent fired');
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.event({ category: 'CTA', action: name })
   }
+}
+
+function NavMenu({ isOpen, onMenuClick }) {
+  return (
+    <nav id="NavMenu" role="navigation" className={isOpen ? 'Open' : undefined}>
+      <a href="https://www.brandmeisteractivity.live/"
+        className="NavMenuItem"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onMenuClick() || logCtaEvent('About')}>
+        <FontAwesomeIcon icon={faInfoCircle} fixedWidth /> About
+      </a>
+      <a href="https://www.brandmeisteractivity.live/#news"
+        className="NavMenuItem"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onMenuClick() || logCtaEvent('News')}>
+        <FontAwesomeIcon icon={faNewspaper} fixedWidth /> News
+      </a>
+      <a href="https://www.brandmeisteractivity.live/#support"
+        className="NavMenuItem"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onMenuClick() || logCtaEvent('Support')}>
+        <FontAwesomeIcon icon={faCoffee} fixedWidth /> Support
+      </a>
+    </nav>
+  );
+}
+
+NavMenu.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onMenuClick: PropTypes.func.isRequired,
+};
+
+const propTypes = {};
+
+const defaultProps = {};
+
+export default function Header() {
+  const [ menuOpen, setMenuOpen ] = useState(false);
+
+  return (
+    <header id="Header">
+      <h1>
+        <FontAwesomeIcon icon={faBroadcastTower} />
+        <span className="Title">Brandmeister Top Activity</span>
+      </h1>
+      <MenuButton onClick={() => setMenuOpen(!menuOpen)} />
+      <NavMenu isOpen={menuOpen} onMenuClick={() => setMenuOpen(!menuOpen)} />
+    </header>
+  );
 }
 
  Header.propTypes = propTypes;
