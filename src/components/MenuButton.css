@@ -1,0 +1,19 @@
+/* Mobile menu button styles */
+
+#MenuBtn {
+  border: none;
+  padding: 0;
+  background-color: #dd4b39;
+  cursor: pointer;
+}
+
+#MenuBtn > img {
+  width: 2rem;
+  height: 1.25rem;
+}
+
+@media screen and (min-width: 768px) {
+  #MenuBtn {
+    display: none;
+  }
+}

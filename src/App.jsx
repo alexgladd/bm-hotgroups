@@ -11,6 +11,7 @@ import TopGroups from './components/TopGroups';
 import TopCallsigns from './components/TopCallsigns';
 import { startSessionFilter, endSessionFilter } from './util/session';
 import './App.css';
+import Controls from './components/Controls';
 
 class App extends React.Component {
   constructor(props) {
@@ -181,11 +182,12 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
-          <div id="Aggregation">
-            <span className="Window Subtext">Aggregating over {aggregationWindowMins} minutes</span>
-            { /* eslint-disable-next-line */ }
-            <a href="#" onClick={this.handleReset}>Clear</a>
-          </div>
+          <Controls
+            aggMins={aggregationWindowMins}
+            enabled={!startup}
+            connected={bmConnected}
+            onConnectionClick={this.handleConnectionBtn}
+            onResetClick={this.handleReset} />
           <CurrentlyActive sessions={activeSessions} />
           <TopGroups talkGroups={topGroups} />
           <TopCallsigns callsigns={topCallsigns} />
