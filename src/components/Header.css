@@ -44,13 +44,13 @@ Header styles
 
 #NavMenu.Open {
   visibility: visible;
-  opacity: 100;
+  opacity: 1;
 }
 
 #NavMenu .NavMenuItem {
   height: 3.75rem;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
   padding: 0 1rem;
@@ -60,6 +60,10 @@ Header styles
 
 #NavMenu .NavMenuItem:hover {
   background-color: #F6F1F222;
+}
+
+#NavMenu .NavMenuItem > svg {
+  margin-right: 0.5rem;
 }
 
 @media screen and (min-width: 375px) {
@@ -80,10 +84,6 @@ Header styles
   #Header > h1 > .Title {
     margin-left: 0.75rem;
   }
-
-  #NavMenu {
-    font-size: 1.25rem;
-  }
 }
 
 @media screen and (min-width: 768px) {
@@ -96,7 +96,16 @@ Header styles
   }
 
   #NavMenu {
+    position: static;
+    top: unset;
     left: unset;
-    font-size: 1.4rem;
+    right: unset;
+    flex-flow: row nowrap;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  #NavMenu .NavMenuItem {
+    padding: 0 0.75rem;
   }
 }
