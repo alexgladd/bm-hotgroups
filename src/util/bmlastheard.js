@@ -6,7 +6,9 @@ import log from './logger';
 const BM_DEFAULT_URL = 'https://api.brandmeister.network';
 const BM_DEFAULT_OPTS = {
   path: '/lh',
-  reconnection: true
+  transports: ['websocket', 'polling'],
+  secure: true,
+  reconnection: true,
 };
 
 export default class BrandmeisterLastHeard {

@@ -1,6 +1,6 @@
 {
   "name": "bm-hotgroups",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -10,13 +10,13 @@
     "@sentry/react": "^6.3.5",
     "@sentry/tracing": "^6.3.5",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.30.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-ga": "^3.3.0",
-    "react-scripts": "4.0.3",
-    "socket.io-client": "^2.4.0"
+    "react-ga4": "^2.1.0",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +25,7 @@
     "eject": "react-scripts eject"
   },
   "engines": {
-    "node": "12.x"
+    "node": "20.x"
   },
   "browserslist": {
     "production": [

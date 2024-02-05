@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBroadcastTower, faInfoCircle, faNewspaper, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
