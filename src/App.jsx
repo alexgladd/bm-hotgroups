@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import moment from 'moment';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
@@ -146,8 +146,8 @@ class App extends React.Component {
 
     if (process.env.NODE_ENV === 'production') {
       // only use analytics in prod
-      ReactGA.initialize('UA-121772253-1');
-      ReactGA.pageview(window.location.pathname);
+      ReactGA.initialize('G-LSNRGQJRG7');
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname, title: "Brandmeister Top Activity" });
 
       // only open automatically in prod
       this.bmlh.open();
