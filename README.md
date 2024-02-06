@@ -5,12 +5,10 @@
   <img src="https://github.com/alexgladd/bm-hotgroups/workflows/Deployment/badge.svg">
 </p>
 
-Simple SPA that aggregates the *last heard* stream from the Brandmeister DMR network to show
+Simple SPA that aggregates the _last heard_ stream from the Brandmeister DMR network to show
 the most active talk groups, callsigns, etc.
 
 Created by [Alex Gladd](https://github.com/alexgladd), K3HEX
-
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 ## Feedback
 
@@ -22,7 +20,8 @@ Contributions welcome! Note that all active development is done on the [develop]
 
 **Prerequisites**
 
-* Node.js 12.x
+- Node.js 20.x
+- pnpm 8.x
 
 **Setup**
 
@@ -36,6 +35,6 @@ Contributions welcome! Note that all active development is done on the [develop]
 
 ## License
 
-Copyright (c) 2020 Alex Gladd
+Copyright © 2024 Alex Gladd
 
-This project is offered under the [MIT license](LICENSE.md)
+This project is offered under the [MIT license](LICENSE)
