@@ -1,13 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import BrandmeisterLastHeard from "@/lib/bmlh";
+import { useEffect, useState } from "react";
+import useBmlh from "@/hooks/useBmlh";
 
 function App() {
   const [connected, setConnected] = useState(false);
-  const bmlh = useRef<BrandmeisterLastHeard | null>(null);
-
-  if (bmlh.current === null) {
-    bmlh.current = new BrandmeisterLastHeard();
-  }
+  const [bmlh] = useBmlh();
 
   const msgFilter = (msg: object) => {
     if (msg.DestinationID === 91 && msg.Event === "Session-Start") {
@@ -20,23 +16,23 @@ function App() {
   const msgHandler = (msg: object) => console.log(msg);
 
   const onBtnClick = () => {
-    if (bmlh.current!.isConnected) {
-      bmlh.current!.close();
+    if (bmlh.isConnected) {
+      bmlh.close();
     } else {
-      bmlh.current!.open();
+      bmlh.open();
     }
   };
 
   useEffect(() => {
-    bmlh.current!.onConnectionChange((connected) => setConnected(connected));
-    bmlh.current!.onMsg(msgHandler, msgFilter);
-    // bmlh.current!.open();
+    bmlh.onConnectionChange((connected) => setConnected(connected));
+    bmlh.onMsg(msgHandler, msgFilter);
+    // bmlh.open();
 
     return () => {
-      bmlh.current!.dropListeners();
-      bmlh.current!.close();
+      bmlh.dropListeners();
+      bmlh.close();
     };
-  }, []);
+  }, [bmlh]);
 
   return (
     <main className="p-6">
