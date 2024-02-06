@@ -2,29 +2,32 @@
 
 name: CI
 
-on: [ push, pull_request ]
-  branches-ignore:
-    - version2
+on:
+  push:
+    branches-ignore:
+      - version2
+
+  pull_request:
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
 
-    - name: Install
-      run: npm ci
+      - name: Install
+        run: npm ci
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: Test
-      run: npm test
-      env:
-        CI: true
+      - name: Test
+        run: npm test
+        env:
+          CI: true
