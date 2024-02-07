@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useBmlh from "@/hooks/useBmlh";
+import Header from "@/components/Header";
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -35,16 +36,19 @@ function App() {
   }, [bmlh]);
 
   return (
-    <main className="p-6">
-      <h1 className="py-4 text-2xl">Brandmeister Top Activity</h1>
-      <button
-        type="button"
-        onClick={onBtnClick}
-        className="p-2 bg-primary-600 text-white font-bold"
-      >
-        {connected ? "Disconnect" : "Connect"}
-      </button>
-    </main>
+    <>
+      <Header />
+      <main className="p-6">
+        <h1 className="py-4 text-2xl">Brandmeister Top Activity</h1>
+        <button
+          type="button"
+          onClick={onBtnClick}
+          className="p-2 bg-primary text-light font-bold"
+        >
+          {connected ? "Disconnect" : "Connect"}
+        </button>
+      </main>
+    </>
   );
 }
 

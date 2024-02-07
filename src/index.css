@@ -4,6 +4,6 @@
 
 @layer base {
   :root {
-    @apply bg-background text-foreground font-sans subpixel-antialiased;
+    @apply bg-light text-dark font-sans subpixel-antialiased;
   }
 }

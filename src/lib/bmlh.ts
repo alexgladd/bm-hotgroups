@@ -37,8 +37,6 @@ class BrandmeisterLastHeard {
     this.socket.on("reconnect_error", this._onConnectError);
     this.socket.on("reconnect_failed", this._onReconnectFailed);
     this.socket.on("error", this._onError);
-
-    // this.socket.on("mqtt", this._onMqtt);
   }
 
   get isConnected() {
@@ -84,11 +82,6 @@ class BrandmeisterLastHeard {
     this.socket.off("mqtt");
     this.handleConnectChange = () => {};
   }
-
-  _onMqtt = (msg: LhMsg) => {
-    const p = JSON.parse(msg.payload);
-    console.log(`[${msg.topic}]:`, p);
-  };
 
   _onConnect = () => {
     console.log(`[BMLH] successfully connected to ${this.url}`);
