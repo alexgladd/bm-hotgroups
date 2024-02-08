@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useBmlh from "@/hooks/useBmlh";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -48,6 +49,7 @@ function App() {
           {connected ? "Disconnect" : "Connect"}
         </button>
       </main>
+      <Footer />
     </>
   );
 }

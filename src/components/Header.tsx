@@ -61,7 +61,7 @@ function Header() {
         )}
       >
         {menuItems.map((m) => (
-          <div>
+          <div key={m.label}>
             <a
               href={m.url}
               target="_blank"
@@ -70,7 +70,7 @@ function Header() {
               <div>
                 <FontAwesomeIcon icon={m.icon} fixedWidth />
               </div>
-              <div>{m.label}</div>
+              <div className="tracking-wide">{m.label}</div>
             </a>
           </div>
         ))}
