@@ -16,7 +16,7 @@ function Footer() {
           <FontAwesomeIcon icon={faGithub} />
         </a>
       </div>
-      <div className="italic">73s de K3HEX</div>
+      <div className="italic">73 de K3HEX</div>
       <div>
         <a
           href="https://github.com/alexgladd/bm-hotgroups/issues"

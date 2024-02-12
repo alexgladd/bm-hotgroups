@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useBmlh from "@/hooks/useBmlh";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import HotGroups from "@/components/HotGroups";
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -39,15 +40,18 @@ function App() {
   return (
     <>
       <Header />
-      <main className="p-6">
-        <h1 className="py-4 text-2xl">Brandmeister Top Activity</h1>
-        <button
-          type="button"
-          onClick={onBtnClick}
-          className="p-2 bg-primary text-light font-bold"
-        >
-          {connected ? "Disconnect" : "Connect"}
-        </button>
+      <main className="mt-16 mb-12 p-6">
+        <HotGroups />
+        <section>
+          <h1 className="py-2 text-2xl">Brandmeister Top Activity</h1>
+          <button
+            type="button"
+            onClick={onBtnClick}
+            className="p-2 bg-primary text-light font-bold"
+          >
+            {connected ? "Disconnect" : "Connect"}
+          </button>
+        </section>
       </main>
       <Footer />
     </>
