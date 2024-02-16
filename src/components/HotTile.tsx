@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faEllipsis,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { twJoin } from "tailwind-merge";
 
 const bgMap = [
@@ -58,7 +54,7 @@ function HotTile({
         ) : active ? (
           <FontAwesomeIcon icon={faMicrophone} beatFade />
         ) : (
-          <FontAwesomeIcon icon={faEllipsis} />
+          <span>&nbsp;</span>
         )}
       </div>
     </div>

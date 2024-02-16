@@ -9,7 +9,7 @@ function App() {
   const [bmlh] = useBmlh();
 
   const msgFilter = (msg: object) => {
-    if (msg.DestinationID === 91 && msg.Event === "Session-Start") {
+    if (msg.DestinationID === 91) {
       return true;
     } else {
       return false;
