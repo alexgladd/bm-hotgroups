@@ -1,4 +1,5 @@
 import { io, type Socket } from "socket.io-client";
+import type { SessionMsg } from "@/lib/types";
 
 const BM_DEFAULT_URL = "https://api.brandmeister.network";
 const BM_DEFAULT_OPTS = {
@@ -10,14 +11,14 @@ const BM_DEFAULT_OPTS = {
 };
 
 export type FnConnectionChange = (connected: boolean) => void;
-export type FnMsgFilter = (msg: object) => boolean;
-export type FnMsgHandler = (msg: object) => void;
+export type FnMsgFilter = (msg: SessionMsg) => boolean;
+export type FnMsgHandler = (msg: SessionMsg) => void;
 export type LhMsg = {
   topic: "LH-Startup" | "LH";
   payload: string;
 };
 
-class BrandmeisterLastHeard {
+export class BrandmeisterLastHeard {
   private connected = false;
   private handleConnectChange: FnConnectionChange = () => {};
   private url = BM_DEFAULT_URL;
@@ -51,10 +52,7 @@ class BrandmeisterLastHeard {
     this.socket.close();
   }
 
-  onConnectionChange(
-    this: BrandmeisterLastHeard,
-    handler: FnConnectionChange | null | undefined
-  ) {
+  onConnectionChange(this: BrandmeisterLastHeard, handler: FnConnectionChange | null | undefined) {
     if (handler) {
       this.handleConnectChange = handler;
     } else {
@@ -62,18 +60,15 @@ class BrandmeisterLastHeard {
     }
   }
 
-  onMsg(
-    this: BrandmeisterLastHeard,
-    handler: FnMsgHandler,
-    filter?: FnMsgFilter,
-    replace = true
-  ) {
+  onMsg(this: BrandmeisterLastHeard, handler: FnMsgHandler, filter?: FnMsgFilter, replace = true) {
     if (replace) {
       this.socket.off("mqtt");
     }
 
+    console.log("[BMLH] Adding mqtt listener");
+
     this.socket.on("mqtt", (msg: LhMsg) => {
-      const lhMsg = JSON.parse(msg.payload);
+      const lhMsg = JSON.parse(msg.payload) as SessionMsg;
       if (!filter || filter(lhMsg)) handler(lhMsg);
     });
   }
@@ -114,9 +109,7 @@ class BrandmeisterLastHeard {
   };
 
   _onReconnecting = (attempt: number) => {
-    console.log(
-      `[BMLH] attempting to reconnect to ${this.url} (attempt ${attempt})`
-    );
+    console.log(`[BMLH] attempting to reconnect to ${this.url} (attempt ${attempt})`);
     this.connected = false;
     this.handleConnectChange(this.connected);
   };
@@ -131,5 +124,3 @@ class BrandmeisterLastHeard {
     console.error(`[BMLH] socket error on ${this.url}`, err);
   }
 }
-
-export default BrandmeisterLastHeard;
