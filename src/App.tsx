@@ -70,7 +70,7 @@ function App() {
             </div>
           </div>
         </section>
-        <HotGroups />
+        <HotGroups groups={brandmeister.groups} />
       </main>
       <Footer />
     </>

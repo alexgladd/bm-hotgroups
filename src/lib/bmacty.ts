@@ -3,49 +3,56 @@ import type { Session, SessionMsg } from "@/lib/types";
 
 export class BrandmeisterActivity {
   private maxWindowSeconds = 10 * 60;
-  private sessions: Map<string, Session>;
+  private trackedSessions: Map<string, Session>;
 
   constructor() {
-    this.sessions = new Map();
+    this.trackedSessions = new Map();
+  }
+
+  get sessions() {
+    return Array.from(this.trackedSessions.values());
   }
 
   handleSessionStart(this: BrandmeisterActivity, msg: SessionMsg) {
     console.log("[BMACT] session start:", msg);
-    const existing = this.sessions.get(msg.SessionID);
+    const existing = this.trackedSessions.get(msg.SessionID);
     if (existing) {
       console.log(`[BMACT] Received session-start event for existing session (${msg.SessionID})!`);
     }
 
     const session = BrandmeisterActivity.createSession(msg);
-    this.sessions.set(session.sessionId, session);
+    this.trackedSessions.set(session.sessionId, session);
   }
 
   handleSessionStop(this: BrandmeisterActivity, msg: SessionMsg) {
     console.log("[BMACT] session stop:", msg);
     const endSession = BrandmeisterActivity.createSession(msg);
-    const session = this.sessions.get(endSession.sessionId);
+    const session = this.trackedSessions.get(endSession.sessionId);
 
     if (session) {
       // if this is a stop to an existing session, merge it
       BrandmeisterActivity.mergeSessions(session, endSession);
       // then delete it if it turns out to be a zero-duration session
       if (endSession.durationSeconds! === 0) {
-        this.sessions.delete(endSession.sessionId);
+        this.trackedSessions.delete(endSession.sessionId);
       }
     } else if (endSession.durationSeconds! !== 0) {
       // if this is a stop for a new session, only add it if it's non-zero duration
-      this.sessions.set(endSession.sessionId, endSession);
+      this.trackedSessions.set(endSession.sessionId, endSession);
     }
     // else ignore the session
 
-    console.log(`[BMACT] ${this.sessions.size} sessions:`, Array.from(this.sessions.values()));
+    console.log(
+      `[BMACT] ${this.trackedSessions.size} sessions:`,
+      Array.from(this.trackedSessions.values()),
+    );
   }
 
   prune(this: BrandmeisterActivity) {
-    const oldest = subSeconds(Date.now(), this.maxWindowSeconds);
+    const oldest = subSeconds(new Date(), this.maxWindowSeconds);
     const deleteIds: string[] = [];
 
-    for (const s of this.sessions.values()) {
+    for (const s of this.trackedSessions.values()) {
       if (s.stop && compareAsc(s.stop, oldest) < 1) {
         deleteIds.push(s.sessionId);
       }
@@ -54,12 +61,12 @@ export class BrandmeisterActivity {
     console.log(`[BMACT] Pruning ${deleteIds.length} sessions`);
 
     for (const id of deleteIds) {
-      this.sessions.delete(id);
+      this.trackedSessions.delete(id);
     }
   }
 
   clear(this: BrandmeisterActivity) {
-    this.sessions.clear();
+    this.trackedSessions.clear();
   }
 
   private static createSession(msg: SessionMsg) {

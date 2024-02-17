@@ -26,3 +26,15 @@ export type Session = {
   destinationCall?: string;
   destinationName?: string;
 };
+
+export type TopGroup = {
+  talkGroup: number;
+  name?: string;
+  activeTimes: {
+    start: Date;
+    stop?: Date;
+  }[];
+  active: boolean;
+  activeSeconds: number;
+  activePercent: number;
+};

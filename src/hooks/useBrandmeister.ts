@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { BrandmeisterLastHeard } from "@/lib/bmlh";
 import { BrandmeisterActivity } from "@/lib/bmacty";
 import { isSessionStart, isSessionStop } from "@/lib/session";
+import type { TopGroup } from "@/lib/types";
+import { aggregateGroups } from "@/lib/bmagg";
 
 export default function useBrandmeister(
   aggWindowSeconds: number = 300,
@@ -9,6 +11,8 @@ export default function useBrandmeister(
   connectNow: boolean = false,
 ) {
   const [connected, setConnected] = useState(connectNow);
+  const [started, setStarted] = useState<Date | null>(null);
+  const [groups, setGroups] = useState<TopGroup[]>([]);
   const bmlh = useRef<BrandmeisterLastHeard | null>(null);
   const bmact = useRef<BrandmeisterActivity | null>(null);
 
@@ -44,6 +48,12 @@ export default function useBrandmeister(
     // start updates
     const intervalId = setInterval(() => {
       bmact.current!.prune();
+
+      if (started) {
+        const groups = aggregateGroups(bmact.current!.sessions, aggWindowSeconds, started);
+        console.log("[BMACT] top groups:", groups);
+        setGroups(groups);
+      }
     }, updateIntervalSeconds * 1000);
 
     return () => {
@@ -51,18 +61,23 @@ export default function useBrandmeister(
       bmlh.current!.dropListeners();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aggWindowSeconds, updateIntervalSeconds]);
+  }, [aggWindowSeconds, updateIntervalSeconds, started]);
 
   return {
     isConnected: connected,
+    groups,
     connect: () => {
       bmlh.current!.open();
+      setStarted(new Date());
     },
     disconnect: () => {
       bmlh.current!.close();
+      setStarted(null);
     },
     clear: () => {
       bmact.current!.clear();
+      setGroups([]);
+      setStarted(new Date());
     },
   };
 }

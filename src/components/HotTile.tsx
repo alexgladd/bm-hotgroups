@@ -38,10 +38,10 @@ function HotTile({
       onMouseOut={() => setHover(false)}
       className={twJoin(
         "p-2 flex justify-between gap-x-2 border rounded-md hover:cursor-pointer",
-        bgMap[Math.floor(activePercent * 10.0)],
+        bgMap[Math.min(Math.floor(activePercent * 10.0), 9)],
         activePercent < 0.4
           ? "text-primary-900 border-primary-400"
-          : "text-primary-50 border-primary-900"
+          : "text-primary-50 border-primary-900",
       )}
     >
       <div>
