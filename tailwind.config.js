@@ -25,7 +25,23 @@ export default {
           950: "#44110b",
         },
       },
+      animation: {
+        "popover-enter": "popover-slide 150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "popover-exit": "popover-slide 150ms cubic-bezier(0.4, 0, 0.2, 1) reverse",
+      },
+      keyframes: {
+        "popover-slide": {
+          from: {
+            transform: "translateY(-8px)",
+            opacity: 0,
+          },
+          to: {
+            transform: "translateY(0px)",
+            opacity: 1,
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-react-aria-components")],
 };

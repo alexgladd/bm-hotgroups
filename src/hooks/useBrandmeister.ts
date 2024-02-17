@@ -43,14 +43,12 @@ export default function useBrandmeister(
 
     // start updates
     const intervalId = setInterval(() => {
-      console.log("Updating aggregations");
       bmact.current!.prune();
     }, updateIntervalSeconds * 1000);
 
     return () => {
       clearInterval(intervalId);
       bmlh.current!.dropListeners();
-      bmlh.current!.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aggWindowSeconds, updateIntervalSeconds]);
@@ -62,6 +60,9 @@ export default function useBrandmeister(
     },
     disconnect: () => {
       bmlh.current!.close();
+    },
+    clear: () => {
+      bmact.current!.clear();
     },
   };
 }

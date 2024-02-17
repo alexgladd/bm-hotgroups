@@ -58,6 +58,10 @@ export class BrandmeisterActivity {
     }
   }
 
+  clear(this: BrandmeisterActivity) {
+    this.sessions.clear();
+  }
+
   private static createSession(msg: SessionMsg) {
     const s: Session = {
       sessionId: msg.SessionID,
