@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faMicrophoneSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { twJoin } from "tailwind-merge";
+import { getName } from "@/lib/bmglobal";
 
 const bgMap = [
   "bg-primary-50",
@@ -31,6 +32,12 @@ function HotTile({
 }) {
   const [hover, setHover] = useState(false);
 
+  // fall back to name mappings if the group doesn't have a label
+  let name = label;
+  if (!name) {
+    name = getName(tg);
+  }
+
   return (
     <div
       onClick={onClick}
@@ -46,7 +53,7 @@ function HotTile({
     >
       <div>
         <span className="font-bold">{tg}</span>
-        {label && ` - ${label}`}
+        {name && ` - ${name}`}
       </div>
       <div>
         {hover ? (

@@ -1,10 +1,10 @@
 import { fromUnixTime, differenceInSeconds, subSeconds, compareAsc } from "date-fns";
+import { updateIdMappings } from "@/lib/bmglobal";
 import type { Session, SessionMsg } from "@/lib/types";
 
 export class BrandmeisterActivity {
   private maxWindowSeconds = 10 * 60;
   private trackedSessions: Map<string, Session>;
-  // TODO: do ID-to-name mapping here
 
   constructor() {
     this.trackedSessions = new Map();
@@ -42,6 +42,9 @@ export class BrandmeisterActivity {
       this.trackedSessions.set(endSession.sessionId, endSession);
     }
     // else ignore the session
+
+    // see if we can update any id-to-name mappings
+    updateIdMappings(endSession);
   }
 
   prune(this: BrandmeisterActivity) {
