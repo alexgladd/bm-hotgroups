@@ -9,6 +9,7 @@ import HotGroups from "@/components/HotGroups";
 import useBrandmeister from "@/hooks/useBrandmeister";
 import { Item, Select } from "@/components/Select";
 import { twJoin } from "tailwind-merge";
+import TopGroups from "./components/TopGroups";
 
 const aggWindows = [
   { id: 60, name: "1 minute" },
@@ -71,6 +72,9 @@ function App() {
           </div>
         </section>
         <HotGroups groups={brandmeister.groups} />
+        <div className="flex flex-col lg:flex-row">
+          <TopGroups groups={Array.from(brandmeister.groups.values())} />
+        </div>
       </main>
       <Footer />
     </>
