@@ -11,7 +11,7 @@ export default function useBrandmeister(
   connectNow: boolean = false,
 ) {
   const [connected, setConnected] = useState(connectNow);
-  const [started, setStarted] = useState<Date | null>(null);
+  const [started, setStarted] = useState<Date | null>(connectNow ? new Date() : null);
   const [groups, setGroups] = useState<TopGroup[]>([]);
   const bmlh = useRef<BrandmeisterLastHeard | null>(null);
   const bmact = useRef<BrandmeisterActivity | null>(null);
@@ -77,7 +77,7 @@ export default function useBrandmeister(
     clear: () => {
       bmact.current!.clear();
       setGroups([]);
-      setStarted(new Date());
+      if (connected) setStarted(new Date());
     },
   };
 }

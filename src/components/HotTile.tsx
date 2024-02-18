@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophone, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone, faMicrophoneSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { twJoin } from "tailwind-merge";
 
 const bgMap = [
@@ -48,13 +48,13 @@ function HotTile({
         <span className="font-bold">{tg}</span>
         {label && ` - ${label}`}
       </div>
-      <div>
+      <div className={twJoin(!hover && !active && "text-primary-300")}>
         {hover ? (
-          <FontAwesomeIcon icon={faXmark} />
+          <FontAwesomeIcon fixedWidth icon={faXmark} />
         ) : active ? (
-          <FontAwesomeIcon icon={faMicrophone} beatFade />
+          <FontAwesomeIcon fixedWidth icon={faMicrophone} beatFade />
         ) : (
-          <span>&nbsp;</span>
+          <FontAwesomeIcon fixedWidth icon={faMicrophoneSlash} />
         )}
       </div>
     </div>

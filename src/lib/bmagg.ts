@@ -83,7 +83,6 @@ function reaggregateGroup(
   group.activeSeconds = activeSeconds;
   group.activePercent = activeSeconds / windowSeconds;
 
-  // if (compareAsc(group.))
   return group;
 }
 
