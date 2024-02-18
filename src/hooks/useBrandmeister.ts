@@ -8,10 +8,10 @@ import { aggregateGroups } from "@/lib/bmagg";
 export default function useBrandmeister(
   aggWindowSeconds: number = 300,
   updateIntervalSeconds: number = 5,
-  connectNow: boolean = false,
+  connectAtStart: boolean = false,
 ) {
-  const [connected, setConnected] = useState(connectNow);
-  const [started, setStarted] = useState<Date | null>(connectNow ? new Date() : null);
+  const [connected, setConnected] = useState(connectAtStart);
+  const [started, setStarted] = useState<Date | null>(connectAtStart ? new Date() : null);
   const [groups, setGroups] = useState<Map<number, TopGroup>>(new Map());
   const bmlh = useRef<BrandmeisterLastHeard | null>(null);
   const bmact = useRef<BrandmeisterActivity | null>(null);
@@ -45,8 +45,6 @@ export default function useBrandmeister(
       false,
     );
 
-    if (connectNow && !bmlh.current!.isConnected) bmlh.current!.open();
-
     // start updates if needed
     let intervalId: NodeJS.Timeout | undefined;
     if (started) {
@@ -70,6 +68,12 @@ export default function useBrandmeister(
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aggWindowSeconds, updateIntervalSeconds, started]);
+
+  // run only at first start to handle auto-connection
+  useEffect(() => {
+    if (connectAtStart) bmlh.current!.open();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     isConnected: connected,
