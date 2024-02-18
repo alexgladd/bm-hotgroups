@@ -4,6 +4,7 @@ import type { Session, SessionMsg } from "@/lib/types";
 export class BrandmeisterActivity {
   private maxWindowSeconds = 10 * 60;
   private trackedSessions: Map<string, Session>;
+  // TODO: do ID-to-name mapping here
 
   constructor() {
     this.trackedSessions = new Map();
@@ -30,7 +31,7 @@ export class BrandmeisterActivity {
     const session = this.trackedSessions.get(endSession.sessionId);
 
     if (session) {
-      // if this is a stop to an existing session, merge it
+      // since this is a stop to an existing session, merge it
       BrandmeisterActivity.mergeSessions(session, endSession);
       // then delete it if it turns out to be a zero-duration session
       if (endSession.durationSeconds! === 0) {
