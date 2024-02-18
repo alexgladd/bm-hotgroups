@@ -45,6 +45,8 @@ export default function useBrandmeister(
       false,
     );
 
+    if (connectNow && !bmlh.current!.isConnected) bmlh.current!.open();
+
     // start updates if needed
     let intervalId: NodeJS.Timeout | undefined;
     if (started) {
