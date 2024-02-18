@@ -16,7 +16,7 @@ type HotGroup = {
 
 function HotGroups({ groups }: { groups: Map<number, TopGroup> }) {
   const [watchInput, setWatchInput] = useState("");
-  const [watchTgIds, setWatchTgIds] = useState<number[]>([]);
+  const [watchTgIds, setWatchTgIds] = useState<number[]>([91, 92, 93, 94, 95]);
   const [watchGroups, setWatchGroups] = useState<HotGroup[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
