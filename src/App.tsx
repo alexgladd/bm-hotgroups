@@ -32,10 +32,10 @@ function App() {
   return (
     <>
       <Header />
-      <main className="mt-16 mb-12 p-6">
+      <main className="mt-16 mb-12 p-4 md:p-6">
         <section className="mb-2 flex flex-wrap gap-4 justify-center sm:justify-between items-baseline">
           <div className="flex items-baseline gap-2 text-accent text-sm">
-            <p>Aggregating over</p>
+            <p className="flex-shrink-0">Aggregating over</p>
             <Select
               items={aggWindows}
               selectedKey={aggSeconds}

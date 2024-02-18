@@ -26,11 +26,11 @@ export function Select<T extends object>({ label, children, items, ...props }: S
       {({ isOpen }) => (
         <>
           <Label>{label}</Label>
-          <Button className="p-2 outline-none">
-            <SelectValue />
+          <Button className="p-2 flex gap-2 outline-none">
+            <SelectValue className="overflow-hidden whitespace-nowrap text-ellipsis" />
             <span
               className={twJoin(
-                "inline-block ml-2 text-primary-700 transition-transform",
+                "inline-block text-primary-700 transition-transform",
                 isOpen ? "rotate-180" : "rotate-0",
               )}
               aria-hidden="true"

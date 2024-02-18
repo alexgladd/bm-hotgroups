@@ -51,7 +51,7 @@ function HotTile({
           : "text-primary-50 border-primary-900",
       )}
     >
-      <div>
+      <div className="overflow-hidden text-ellipsis">
         <span className="font-bold">{tg}</span>
         {name && ` - ${name}`}
       </div>
