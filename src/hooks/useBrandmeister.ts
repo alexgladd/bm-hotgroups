@@ -12,7 +12,7 @@ export default function useBrandmeister(
 ) {
   const [connected, setConnected] = useState(connectNow);
   const [started, setStarted] = useState<Date | null>(connectNow ? new Date() : null);
-  const [groups, setGroups] = useState<TopGroup[]>([]);
+  const [groups, setGroups] = useState<Map<number, TopGroup>>(new Map());
   const bmlh = useRef<BrandmeisterLastHeard | null>(null);
   const bmact = useRef<BrandmeisterActivity | null>(null);
 
@@ -45,19 +45,25 @@ export default function useBrandmeister(
       false,
     );
 
-    // start updates
-    const intervalId = setInterval(() => {
-      bmact.current!.prune();
-
-      if (started) {
+    // start updates if needed
+    let intervalId: NodeJS.Timeout | undefined;
+    if (started) {
+      const runUpdate = () => {
+        bmact.current!.prune();
         const groups = aggregateGroups(bmact.current!.sessions, aggWindowSeconds, started);
         console.log("[BMACT] top groups:", groups);
         setGroups(groups);
-      }
-    }, updateIntervalSeconds * 1000);
+      };
+
+      // do an update now...
+      runUpdate();
+
+      // ...then start interval updates
+      intervalId = setInterval(runUpdate, updateIntervalSeconds * 1000);
+    }
 
     return () => {
-      clearInterval(intervalId);
+      if (intervalId) clearInterval(intervalId);
       bmlh.current!.dropListeners();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,7 +82,7 @@ export default function useBrandmeister(
     },
     clear: () => {
       bmact.current!.clear();
-      setGroups([]);
+      setGroups(new Map());
       if (connected) setStarted(new Date());
     },
   };

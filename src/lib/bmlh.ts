@@ -65,8 +65,6 @@ export class BrandmeisterLastHeard {
       this.socket.off("mqtt");
     }
 
-    console.log("[BMLH] Adding mqtt listener");
-
     this.socket.on("mqtt", (msg: LhMsg) => {
       const lhMsg = JSON.parse(msg.payload) as SessionMsg;
       if (!filter || filter(lhMsg)) handler(lhMsg);

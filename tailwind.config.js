@@ -4,6 +4,7 @@ export default {
   theme: {
     fontFamily: {
       sans: ['"Noto Sans"', "system-ui", "sans-serif"],
+      mono: ['"Noto Sans Mono"', "monospace"],
     },
     extend: {
       colors: {

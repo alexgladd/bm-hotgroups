@@ -19,7 +19,7 @@ const aggWindows = [
 
 function App() {
   const [aggSeconds, setAggSeconds] = useState<Key>(aggWindows[2].id);
-  const brandmeister = useBrandmeister(aggSeconds.valueOf() as number, 5, import.meta.env.PROD);
+  const brandmeister = useBrandmeister(aggSeconds.valueOf() as number, 2, import.meta.env.PROD);
 
   const onConnectionClick = () => {
     if (brandmeister.isConnected) {

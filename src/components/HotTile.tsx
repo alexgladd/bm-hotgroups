@@ -37,7 +37,7 @@ function HotTile({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
       className={twJoin(
-        "p-2 flex justify-between gap-x-2 border rounded-md hover:cursor-pointer",
+        "p-2 flex justify-between gap-x-2 border rounded-md hover:cursor-pointer transition-colors",
         bgMap[Math.min(Math.floor(activePercent * 10.0), 9)],
         activePercent < 0.4
           ? "text-primary-900 border-primary-400"
@@ -48,13 +48,20 @@ function HotTile({
         <span className="font-bold">{tg}</span>
         {label && ` - ${label}`}
       </div>
-      <div className={twJoin(!hover && !active && "text-primary-300")}>
+      <div>
         {hover ? (
           <FontAwesomeIcon fixedWidth icon={faXmark} />
         ) : active ? (
           <FontAwesomeIcon fixedWidth icon={faMicrophone} beatFade />
         ) : (
-          <FontAwesomeIcon fixedWidth icon={faMicrophoneSlash} />
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faMicrophoneSlash}
+            className={twJoin(
+              "opacity-25",
+              activePercent < 0.4 ? "text-primary-900" : "text-primary-50",
+            )}
+          />
         )}
       </div>
     </div>

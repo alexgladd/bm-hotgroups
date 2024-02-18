@@ -10,7 +10,7 @@ function Button({ secondary = false, children, className, ...props }: ButtonProp
   return (
     <RaButton
       className={twMerge(
-        "p-2 rounded-sm focus:ring-2 ring-offset-1 outline-none transition-colors",
+        "px-3 py-2 rounded-sm focus:ring-2 ring-offset-1 outline-none transition-colors",
         secondary
           ? "bg-light text-primary-700 border border-primary-700 hover:bg-primary-50 pressed:bg-primary-100 ring-primary-700"
           : "bg-primary-500 font-bold text-light hover:bg-primary-600 pressed:bg-primary-700 ring-primary-500",

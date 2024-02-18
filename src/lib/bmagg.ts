@@ -35,7 +35,7 @@ export function aggregateGroups(sessions: Session[], aggWindowSeconds: number, s
     }
   }
 
-  return Array.from(groups.values());
+  return groups;
 }
 
 function reaggregateGroup(

@@ -14,7 +14,7 @@ export class BrandmeisterActivity {
   }
 
   handleSessionStart(this: BrandmeisterActivity, msg: SessionMsg) {
-    console.log("[BMACT] session start:", msg);
+    // console.log("[BMACT] session start:", msg);
     const existing = this.trackedSessions.get(msg.SessionID);
     if (existing) {
       console.log(`[BMACT] Received session-start event for existing session (${msg.SessionID})!`);
@@ -25,7 +25,7 @@ export class BrandmeisterActivity {
   }
 
   handleSessionStop(this: BrandmeisterActivity, msg: SessionMsg) {
-    console.log("[BMACT] session stop:", msg);
+    // console.log("[BMACT] session stop:", msg);
     const endSession = BrandmeisterActivity.createSession(msg);
     const session = this.trackedSessions.get(endSession.sessionId);
 
@@ -41,11 +41,6 @@ export class BrandmeisterActivity {
       this.trackedSessions.set(endSession.sessionId, endSession);
     }
     // else ignore the session
-
-    console.log(
-      `[BMACT] ${this.trackedSessions.size} sessions:`,
-      Array.from(this.trackedSessions.values()),
-    );
   }
 
   prune(this: BrandmeisterActivity) {
@@ -63,6 +58,11 @@ export class BrandmeisterActivity {
     for (const id of deleteIds) {
       this.trackedSessions.delete(id);
     }
+
+    console.log(
+      `[BMACT] ${this.trackedSessions.size} sessions:`,
+      Array.from(this.trackedSessions.values()),
+    );
   }
 
   clear(this: BrandmeisterActivity) {
