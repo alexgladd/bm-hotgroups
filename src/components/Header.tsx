@@ -32,7 +32,7 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="px-4 flex items-center fixed top-0 w-screen h-16 bg-primary text-light z-50">
+    <header className="px-4 flex items-center fixed top-0 w-screen h-14 bg-primary text-light z-50">
       <h1 className="text-base md:text-xl lg:text-2xl flex-auto flex-shrink-0 tracking-wide md:tracking-wider">
         <FontAwesomeIcon icon={faTowerBroadcast} />
         <span className="ml-2 font-bold">Brandmeister Top Activity</span>
@@ -50,7 +50,7 @@ function Header() {
       <nav
         role="navigation"
         className={twJoin(
-          "py-2 md:py-0 absolute md:static flex flex-col md:flex-row top-16 left-0 right-0 -z-20 bg-primary-500 md:bg-primary text-light transition md:transition-none",
+          "py-2 md:py-0 absolute md:static flex flex-col md:flex-row top-14 left-0 right-0 -z-20 bg-primary-500 md:bg-primary text-light transition md:transition-none",
           menuOpen
             ? "translate-y-0 opacity-100"
             : "-translate-y-full md:translate-y-0 opacity-0 md:opacity-100",
@@ -61,7 +61,7 @@ function Header() {
             <a
               href={m.url}
               target="_blank"
-              className="py-2 md:py-0 md:h-16 md:px-4 md:text-lg lg:text-xl flex justify-center md:justify-normal items-center gap-2 hover:bg-primary-600 md:hover:bg-primary-700 active:bg-primary-700 transition-colors"
+              className="py-2 md:py-0 md:h-14 md:px-4 md:text-lg lg:text-xl flex justify-center md:justify-normal items-center gap-2 hover:bg-primary-600 md:hover:bg-primary-700 active:bg-primary-700 transition-colors"
             >
               <div>
                 <FontAwesomeIcon icon={m.icon} fixedWidth />
