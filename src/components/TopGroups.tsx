@@ -50,7 +50,7 @@ function TopGroups({ groups }: { groups: TopGroup[] }) {
   }, [groups]);
 
   return (
-    <section className="mb-6">
+    <section className="mb-6 lg:basis-1/2">
       <h1 className="py-4 text-2xl font-bold text-center tracking-wide">
         <FontAwesomeIcon icon={faUsers} /> Top Talkgroups
       </h1>

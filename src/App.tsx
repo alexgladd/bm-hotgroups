@@ -72,8 +72,9 @@ function App() {
           </div>
         </section>
         <HotGroups groups={brandmeister.groups} />
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row lg:gap-6">
           <TopGroups groups={Array.from(brandmeister.groups.values())} />
+          <div className="lg:basis-1/2 bg-primary-50 text-center">Talkers</div>
         </div>
       </main>
       <Footer />
