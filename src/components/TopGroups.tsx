@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassHalf, faLightbulb, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { compareAsc, formatDistance } from "date-fns";
 import { Body, Cell, Column, Header, Row, Table } from "@/components/Table";
+import { H1 } from "@/components/Headings";
 import { getName } from "@/lib/bmglobal";
 import type { TopGroup } from "@/lib/types";
 
@@ -51,9 +52,9 @@ function TopGroups({ groups }: { groups: TopGroup[] }) {
 
   return (
     <section className="mb-6 lg:basis-1/2">
-      <h1 className="py-4 text-2xl font-bold text-center tracking-wide">
+      <H1>
         <FontAwesomeIcon icon={faUsers} /> Top Talkgroups
-      </h1>
+      </H1>
       <Table aria-label="Top 20 talkgroups" className="w-full">
         <Header>
           <Column isRowHeader>Talkgroup</Column>

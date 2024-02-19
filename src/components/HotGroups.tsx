@@ -5,6 +5,7 @@ import { Form } from "react-aria-components";
 import HotTile from "@/components/HotTile";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
+import { H1 } from "@/components/Headings";
 import type { TopGroup } from "@/lib/types";
 
 type HotGroup = {
@@ -66,9 +67,9 @@ function HotGroups({ groups }: { groups: Map<number, TopGroup> }) {
 
   return (
     <section className="mb-6 container mx-auto">
-      <h1 className="py-4 text-2xl font-bold text-center tracking-wide">
+      <H1>
         <FontAwesomeIcon icon={faFire} /> Hot Talkgroups
-      </h1>
+      </H1>
       <Form className="flex gap-2 justify-center items-baseline" onSubmit={handleSubmit}>
         <TextField
           label="Watch talkgroup"
