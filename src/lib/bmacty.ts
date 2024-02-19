@@ -88,7 +88,8 @@ export class BrandmeisterActivity {
     };
 
     if (s.stop) {
-      s.durationSeconds = msg.Stop - msg.Start;
+      BrandmeisterActivity.correctClockSkew(s);
+      s.durationSeconds = differenceInSeconds(s.stop, s.start);
     }
 
     return s;
@@ -105,6 +106,7 @@ export class BrandmeisterActivity {
 
     if (other.stop) {
       base.stop = other.stop;
+      BrandmeisterActivity.correctClockSkew(base);
       base.durationSeconds = differenceInSeconds(base.stop, base.start);
     }
 
@@ -113,5 +115,19 @@ export class BrandmeisterActivity {
     if (other.talkerAlias) base.talkerAlias = other.talkerAlias;
     if (other.destinationCall) base.destinationCall = other.destinationCall;
     if (other.destinationName) base.destinationName = other.destinationName;
+  }
+
+  private static correctClockSkew(session: Session) {
+    if (!session.stop) return;
+
+    const now = new Date();
+    const fastSeconds = differenceInSeconds(session.stop, now);
+
+    if (fastSeconds > 0) {
+      // some clock is running fast; offset session times by the same amount
+      console.log(`[BMACT] Session ${session.sessionId} running fast by ${fastSeconds} second(s)!`);
+      session.start = subSeconds(session.start, fastSeconds + 1);
+      session.stop = subSeconds(session.stop, fastSeconds + 1);
+    }
   }
 }

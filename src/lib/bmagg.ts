@@ -80,6 +80,13 @@ function reaggregateGroup(
     if (!at.stop) group.active = true;
   }
 
+  if (activeSeconds > windowSeconds) {
+    console.error(
+      `[BMAGG] Aggregated active seconds (${activeSeconds}) for group ${group.talkGroup} is greater than current window (${windowSeconds})! This is a bug!`,
+    );
+    activeSeconds = windowSeconds;
+  }
+
   group.activeSeconds = activeSeconds;
   group.activePercent = activeSeconds / windowSeconds;
 
@@ -132,7 +139,12 @@ function createGroup(session: Session, begin: Date, now: Date, windowSeconds: nu
     ? differenceInSeconds(session.stop, start)
     : differenceInSeconds(now, start);
 
-  if (activeSeconds < 0 || activeSeconds > windowSeconds) activeSeconds = windowSeconds;
+  if (activeSeconds < 0) {
+    console.error(
+      `[BMAGG] Active seconds for group ${session.destinationId} is less than 0! This is a bug!`,
+    );
+  }
+  if (activeSeconds > windowSeconds) activeSeconds = windowSeconds;
 
   const g: TopGroup = {
     talkGroup: session.destinationId,

@@ -1,17 +1,45 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHourglassHalf, faLightbulb, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { compareAsc, formatDistance } from "date-fns";
 import { Body, Cell, Column, Header, Row, Table } from "@/components/Table";
 import { getName } from "@/lib/bmglobal";
 import type { TopGroup } from "@/lib/types";
 
 function getTopGroups(groups: TopGroup[], count: number) {
-  const sortedGroups = groups.slice().sort((a, b) => a.activeSeconds - b.activeSeconds);
+  const sortedGroups = groups
+    .slice()
+    .filter((g) => g.talkGroup < 2999999 || g.talkGroup > 49999999)
+    .sort((a, b) => a.activeSeconds - b.activeSeconds);
   return sortedGroups.reverse().slice(0, count);
+}
+
+function getLastActive(group: TopGroup, now: Date) {
+  if (group.active) {
+    return "now";
+  } else if (group.activeTimes.length === 0) {
+    return "-";
+  } else {
+    let latestStop = group.activeTimes[0].stop;
+    for (let i = 1; i < group.activeTimes.length; i++) {
+      const tStop = group.activeTimes[i].stop;
+
+      if (!latestStop || (tStop && compareAsc(latestStop, tStop) < 0)) {
+        latestStop = tStop;
+      }
+    }
+
+    if (latestStop) {
+      return formatDistance(latestStop, now, { includeSeconds: true, addSuffix: true });
+    } else {
+      return "now";
+    }
+  }
 }
 
 function TopGroups({ groups }: { groups: TopGroup[] }) {
   const [topGroups, setTopGroups] = useState<TopGroup[]>(getTopGroups(groups, 20));
+  const now = new Date();
 
   useEffect(() => {
     const newGroups = getTopGroups(groups, 20);
@@ -23,7 +51,7 @@ function TopGroups({ groups }: { groups: TopGroup[] }) {
 
   return (
     <section className="mb-6">
-      <h1 className="py-4 text-2xl font-bold text-center">
+      <h1 className="py-4 text-2xl font-bold text-center tracking-wide">
         <FontAwesomeIcon icon={faUsers} /> Top Talkgroups
       </h1>
       <Table aria-label="Top 20 talkgroups" className="w-full">
@@ -45,11 +73,21 @@ function TopGroups({ groups }: { groups: TopGroup[] }) {
                 )}
               </Cell>
               <Cell>{group.activeSeconds} seconds</Cell>
-              <Cell>{group.active ? "Now" : "Some date"}</Cell>
+              <Cell>{getLastActive(group, now)}</Cell>
             </Row>
           ))}
         </Body>
       </Table>
+      {groups.length === 0 && (
+        <p className="mt-8 text-center text-accent italic text-sm">
+          <FontAwesomeIcon icon={faHourglassHalf} /> Waiting for talkgroup aggregation...
+        </p>
+      )}
+      {groups.length > 0 && topGroups.length === 0 && (
+        <p className="mt-8 text-center text-accent italic text-sm">
+          <FontAwesomeIcon icon={faLightbulb} /> No talkgroups? Try clearing your filters!
+        </p>
+      )}
     </section>
   );
 }

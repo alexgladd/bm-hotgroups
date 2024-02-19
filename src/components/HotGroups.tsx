@@ -66,8 +66,8 @@ function HotGroups({ groups }: { groups: Map<number, TopGroup> }) {
 
   return (
     <section className="mb-6 container mx-auto">
-      <h1 className="py-4 text-2xl font-bold text-center">
-        <FontAwesomeIcon icon={faFire} /> Hot Groups
+      <h1 className="py-4 text-2xl font-bold text-center tracking-wide">
+        <FontAwesomeIcon icon={faFire} /> Hot Talkgroups
       </h1>
       <Form className="flex gap-2 justify-center items-baseline" onSubmit={handleSubmit}>
         <TextField
