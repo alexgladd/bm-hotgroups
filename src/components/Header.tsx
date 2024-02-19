@@ -8,6 +8,7 @@ import {
   faCoffee,
 } from "@fortawesome/free-solid-svg-icons";
 import { twJoin } from "tailwind-merge";
+import Button from "@/components/Button";
 
 const menuItems = [
   {
@@ -36,20 +37,15 @@ function Header() {
         <FontAwesomeIcon icon={faTowerBroadcast} />
         <span className="ml-2 font-bold">Brandmeister Top Activity</span>
       </h1>
-      <button
-        type="button"
-        className="p-2 flex flex-col justify-center md:hidden"
-        onClick={() => setMenuOpen(!menuOpen)}
+      <Button
+        className="flex flex-col justify-center md:hidden bg-primary ring-offset-transparent"
+        onPress={() => setMenuOpen(!menuOpen)}
       >
         <FontAwesomeIcon
           icon={faBars}
-          className={
-            menuOpen
-              ? "size-6 transition-transform rotate-90"
-              : "size-6 transition-transform"
-          }
+          className={twJoin("size-6 transition-transform", menuOpen && "rotate-90")}
         />
-      </button>
+      </Button>
       <div className="absolute top-0 bottom-0 left-0 right-0 -z-10 bg-primary md:hidden"></div>
       <nav
         role="navigation"
@@ -57,7 +53,7 @@ function Header() {
           "py-2 md:py-0 absolute md:static flex flex-col md:flex-row top-16 left-0 right-0 -z-20 bg-primary-500 md:bg-primary text-light transition md:transition-none",
           menuOpen
             ? "translate-y-0 opacity-100"
-            : "-translate-y-full md:translate-y-0 opacity-0 md:opacity-100"
+            : "-translate-y-full md:translate-y-0 opacity-0 md:opacity-100",
         )}
       >
         {menuItems.map((m) => (
