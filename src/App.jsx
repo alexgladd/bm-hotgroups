@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactGA from 'react-ga4';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import BMLH from './util/bmlastheard';
 import BMAgg from './util/bmagg';
 import BMAct from './util/bmactive';
@@ -182,6 +184,10 @@ class App extends React.Component {
           onConnectionClick={this.handleConnectionBtn} />
         
         <main id="App">
+          <div id="Banner">
+            <FontAwesomeIcon icon={faBullhorn} />
+            <p><a href="https://version2.bm-hotgroups.pages.dev/" target="_blank">Click here to preview Brandmeister Top Activity version 2</a>!</p>
+          </div>
           <Controls
             aggMins={aggregationWindowMins}
             enabled={!startup}

@@ -20,8 +20,9 @@ a:focus, a:hover {
 #App {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto auto auto auto;
   grid-template-areas:
+    "banner"
     "controls"
     "actives"
     "top-groups"
@@ -30,6 +31,32 @@ a:focus, a:hover {
   margin-top: 4rem;
   margin-bottom: 3rem;
   padding: 0 12px;
+}
+
+#Banner {
+  grid-area: banner;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  padding: 0.5rem;
+  margin: 0 -12px;
+  background-color: #de9e8e;
+}
+
+#Banner p {
+  margin: 0;
+}
+
+#Banner a, #Banner a:visited {
+  color: #480a10cc;
+  font-weight: 700;
+}
+
+#Banner a:focus, #Banner a:hover {
+  color: #480a10;
+  font-weight: 700;
 }
 
 .Button {
