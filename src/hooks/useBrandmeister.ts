@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { BrandmeisterLastHeard } from "@/lib/bmlh";
 import { BrandmeisterActivity } from "@/lib/bmacty";
 import { isSessionStart, isSessionStop } from "@/lib/session";
-import type { TopGroup } from "@/lib/types";
-import { aggregateGroups } from "@/lib/bmagg";
+import { aggregate } from "@/lib/bmagg";
+import type { TopGroup, TopTalker } from "@/lib/types";
 
 export default function useBrandmeister(
   aggWindowSeconds: number = 300,
@@ -13,6 +13,7 @@ export default function useBrandmeister(
   const [connected, setConnected] = useState(connectAtStart);
   const [started, setStarted] = useState<Date | null>(connectAtStart ? new Date() : null);
   const [groups, setGroups] = useState<Map<number, TopGroup>>(new Map());
+  const [talkers, setTalkers] = useState<Map<number, TopTalker>>(new Map());
   const bmlh = useRef<BrandmeisterLastHeard | null>(null);
   const bmact = useRef<BrandmeisterActivity | null>(null);
 
@@ -50,9 +51,11 @@ export default function useBrandmeister(
     if (started) {
       const runUpdate = () => {
         bmact.current!.prune();
-        const groups = aggregateGroups(bmact.current!.sessions, aggWindowSeconds, started);
-        console.log("[BMACT] top groups:", groups);
+        const { groups, talkers } = aggregate(bmact.current!.sessions, aggWindowSeconds, started);
+        console.log("[BM] top groups:", groups);
+        console.log("[BM] top talkers:", talkers);
         setGroups(groups);
+        setTalkers(talkers);
       };
 
       // do an update now...
@@ -78,6 +81,7 @@ export default function useBrandmeister(
   return {
     isConnected: connected,
     groups,
+    talkers,
     connect: () => {
       bmlh.current!.open();
       setStarted(new Date());

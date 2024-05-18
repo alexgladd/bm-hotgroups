@@ -27,14 +27,26 @@ export type Session = {
   destinationName?: string;
 };
 
-export type TopGroup = {
-  talkGroup: number;
-  name?: string;
-  activeTimes: {
-    start: Date;
-    stop?: Date;
-  }[];
+export type ActiveTime = {
+  start: Date;
+  stop?: Date;
+};
+
+export interface IActiveTimes {
+  id: number;
+  activeTimes: ActiveTime[];
   active: boolean;
   activeSeconds: number;
   activePercent: number;
+}
+
+export type TopGroup = IActiveTimes & {
+  talkGroup: number;
+  name?: string;
+};
+
+export type TopTalker = IActiveTimes & {
+  callsign?: string;
+  name?: string;
+  alias?: string;
 };

@@ -9,7 +9,8 @@ import HotGroups from "@/components/HotGroups";
 import useBrandmeister from "@/hooks/useBrandmeister";
 import { Item, Select } from "@/components/Select";
 import { twJoin } from "tailwind-merge";
-import TopGroups from "./components/TopGroups";
+import TopGroups from "@/components/TopGroups";
+import TopTalkers from "@/components/TopTalkers";
 
 const aggWindows = [
   { id: 60, name: "1 minute" },
@@ -18,9 +19,11 @@ const aggWindows = [
   { id: 600, name: "10 minutes" },
 ];
 
+const connectAtStart = import.meta.env.PROD;
+
 function App() {
   const [aggSeconds, setAggSeconds] = useState<Key>(aggWindows[2].id);
-  const brandmeister = useBrandmeister(aggSeconds.valueOf() as number, 2, import.meta.env.PROD);
+  const brandmeister = useBrandmeister(aggSeconds.valueOf() as number, 2, connectAtStart);
 
   const onConnectionClick = () => {
     if (brandmeister.isConnected) {
@@ -74,7 +77,7 @@ function App() {
         <HotGroups groups={brandmeister.groups} />
         <div className="flex flex-col lg:flex-row lg:gap-6">
           <TopGroups groups={Array.from(brandmeister.groups.values())} />
-          <div className="lg:basis-1/2 bg-primary-50 text-center">Talkers</div>
+          <TopTalkers talkers={Array.from(brandmeister.talkers.values())} />
         </div>
       </main>
       <Footer />
