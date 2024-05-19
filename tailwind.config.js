@@ -44,5 +44,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-react-aria-components")],
+  plugins: [require("tailwindcss-react-aria-components"), require("tailwindcss-animate")],
 };

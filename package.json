@@ -1,6 +1,6 @@
 {
   "name": "bm-hotgroups",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha",
   "author": "Alex Gladd (https://www.alexgladd.dev)",
   "license": "MIT",
   "private": true,
@@ -42,6 +42,7 @@
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
