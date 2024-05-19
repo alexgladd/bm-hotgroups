@@ -93,6 +93,7 @@ export default function useBrandmeister(
     clear: () => {
       bmact.current!.clear();
       setGroups(new Map());
+      setTalkers(new Map());
       if (connected) setStarted(new Date());
     },
   };
