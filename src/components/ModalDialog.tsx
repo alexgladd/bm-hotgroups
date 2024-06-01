@@ -31,7 +31,7 @@ function ModalDialog({
     >
       <Modal
         className={({ isEntering, isExiting }) => `
-        w-full max-w-lg lg:max-w-xl xl:max-w-4xl max-h-full overflow-y-auto rounded bg-white p-6 text-left align-middle shadow-xl
+        w-full max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl max-h-full overflow-y-auto rounded bg-white p-6 text-left align-middle shadow-xl
         ${isEntering ? "animate-in zoom-in-95 ease-out duration-300" : ""}
         ${isExiting ? "animate-out zoom-out-95 ease-in duration-200" : ""}
       `}
