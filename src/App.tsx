@@ -21,7 +21,7 @@ const aggWindows = [
 ];
 
 // TODO re-enable connect at start for full release
-// const connectAtStart = import.meta.env.PROD;
+const connectAtStart = import.meta.env.PROD;
 
 function App() {
   const [modalOpen, setModalOpen] = useState(true);
@@ -37,7 +37,7 @@ function App() {
   };
 
   const onModalDismiss = () => {
-    brandmeister.connect();
+    if (connectAtStart) brandmeister.connect();
     setModalOpen(false);
   };
 
