@@ -12,6 +12,7 @@ import { twJoin } from "tailwind-merge";
 import TopGroups from "@/components/TopGroups";
 import TopTalkers from "@/components/TopTalkers";
 import ModalDialog from "@/components/ModalDialog";
+import { Outlet } from "@tanstack/react-router";
 
 const aggWindows = [
   { id: 60, name: "1 minute" },
@@ -89,6 +90,8 @@ function App() {
         </div>
       </main>
       <Footer />
+
+      <Outlet />
 
       <ModalDialog
         isDismissable

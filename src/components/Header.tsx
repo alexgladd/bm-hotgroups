@@ -9,22 +9,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { twJoin } from "tailwind-merge";
 import Button from "@/components/Button";
+import { Link } from "@tanstack/react-router";
 
 const menuItems = [
   {
     icon: faInfoCircle,
     label: "About",
-    url: "https://www.brandmeisteractivity.live/",
+    to: "/about",
   },
   {
     icon: faNewspaper,
     label: "News",
-    url: "https://www.brandmeisteractivity.live/#news",
+    to: "/news",
   },
   {
     icon: faCoffee,
     label: "Support",
-    url: "https://www.brandmeisteractivity.live/#support",
+    to: "/support",
   },
 ];
 
@@ -58,16 +59,15 @@ function Header() {
       >
         {menuItems.map((m) => (
           <div key={m.label}>
-            <a
-              href={m.url}
-              target="_blank"
+            <Link
+              to={m.to}
               className="py-2 md:py-0 md:h-14 md:px-4 md:text-lg lg:text-xl flex justify-center md:justify-normal items-center gap-2 hover:bg-primary-600 md:hover:bg-primary-700 active:bg-primary-700 transition-colors"
             >
               <div>
                 <FontAwesomeIcon icon={m.icon} fixedWidth />
               </div>
               <div className="tracking-wide">{m.label}</div>
-            </a>
+            </Link>
           </div>
         ))}
       </nav>
