@@ -6,8 +6,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "20.x",
-    "pnpm": "9.x"
+    "node": ">=18",
+    "pnpm": ">=8"
   },
   "scripts": {
     "dev": "vite",
