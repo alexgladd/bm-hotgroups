@@ -11,7 +11,12 @@ function About() {
   };
 
   return (
-    <ModalDialog defaultOpen title="About Brandmeister Top Activity" onOpenChange={onOpenChange}>
+    <ModalDialog
+      defaultOpen
+      isDismissable
+      title="About Brandmeister Top Activity"
+      onOpenChange={onOpenChange}
+    >
       {({ close }) => (
         <div className="flex flex-col flex-nowrap gap-4 text-sm md:text-base lg:text-lg">
           <p>

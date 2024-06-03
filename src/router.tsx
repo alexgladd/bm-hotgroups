@@ -2,6 +2,7 @@ import { createRootRoute, createRoute, createRouter } from "@tanstack/react-rout
 import App from "@/App";
 import About from "@/components/About";
 import News from "@/components/News";
+import Support from "@/components/Support";
 
 const rootRoute = createRootRoute({
   component: App,
@@ -24,7 +25,13 @@ export const newsRoute = createRoute({
   component: News,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, aboutRoute, newsRoute]);
+export const supportRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/support",
+  component: Support,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, aboutRoute, newsRoute, supportRoute]);
 
 const router = createRouter({ routeTree });
 
